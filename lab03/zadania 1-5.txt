@@ -1,0 +1,17 @@
+Zadanie 1
+curl https://inf.ug.edu.pl
+
+Zadanie 2
+curl -i https://lmielewczyk.pl/teaching/inf-prakt/prot-siec-web/lab/files/wiersz.txt
+curl --head https://lmielewczyk.pl/teaching/inf-prakt/prot-siec-web/lab/files/wiersz.txt
+
+Zadanie 3
+curl -X OPTIONS --head https://lmielewczyk.pl/teaching/inf-prakt/prot-siec-web/lab/files/wiersz.txt
+
+Zadanie 4
+scp -r \\NAS1\home\polszewski\Desktop\folder_to_copy polszewski@sigma.ug.edu.pl:~/Pulpit
+
+Zadanie 5
+sftp polszewski@sigma.ug.edu.pl
+cd Pulpit
+put -r \\NAS1\home\polszewski\Desktop\Folder_to_copy_with_sftp/
