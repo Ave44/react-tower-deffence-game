@@ -7,13 +7,28 @@ load_dotenv()
 host = os.getenv('host')
 connection_username = os.getenv('connection_username')
 connection_password = os.getenv('connection_password')
-path = os.getenv('path')
-path_put = os.getenv('path_put')
-path_get = os.getenv('path_get')
+path_main = os.getenv('path_main')
+file_put = os.getenv('file_put')
+file_get = os.getenv('file_get')
 
-print(host, "\n", connection_username)
+def print_connection_data():
+    print(host)
+    print(connection_username)
+    print(connection_password)
+    print(path_main)
+    print(file_put)
+    print(file_get)
 
-with pysftp.Connection(host, connection_username, connection_password) as sftp:
-    with sftp.cd(path):             # temporarily chdir to public
-        sftp.put(path_put)  # upload file to public/ on remote
-        sftp.get(path_get)         # get a remote file
+def put(file):
+    with pysftp.Connection(host, username=connection_username, password=connection_password) as sftp:
+        with sftp.cd(path_main): # ustaw ścieżkę na 'patch_main'
+            sftp.put(file)   # prześlij plik 'file' z obecnego katalogu na 'patch_main' na serwerze zdalnym
+
+def get(file):
+    with pysftp.Connection(host, username=connection_username, password=connection_password) as sftp:
+        with sftp.cd(path_main): # ustaw ścieżkę na 'patch_main'
+            sftp.get(file)       # pobierz plik 'file' ze zdalnego serwera do obecnego katalogu
+
+print_connection_data()
+put(file_put)
+# get(file_get)
