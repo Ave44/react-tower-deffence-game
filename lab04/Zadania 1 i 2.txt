@@ -1,0 +1,7 @@
+Zadanie 1
+
+ssh -L 8080:localhost:3000 polszewski@sigma.ug.edu.pl
+
+Zadanie 2
+
+ssh -R 3000:localhost:8080 polszewski@sigma.ug.edu.pl
