@@ -13,20 +13,25 @@ router.get('/', async (req, res) => {
 
 router.get('/:key', async (req, res) => {
     const key = req.params.key
-    console.log(key)
     const games = await client.get(key)
     return res.json({games});
 });
 
 router.post('/', async (req, res) => {
-    const key = "123"
-    const data = "000000000"
+    const key = req.body.key
+    client.setex(key, 180, "000000000")
+    return res.json(req.body);
+});
+
+router.post('/:key', async (req, res) => {
+    const key = req.params.key
+    const data = req.body.data
     client.setex(key, 180, data)
     return res.json(req.body);
 });
 
 router.delete('/', async (req, res) => {
-    const key = "game"
+    const key = req.body.key
     const games = await client.del(key)
     return res.json({games});
 });
