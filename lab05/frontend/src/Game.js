@@ -16,25 +16,103 @@ function Game() {
             .catch(err => console.log(err))
     }, [gameId])
 
-    function newBoard(index, symbol) {
+    function newBoard(board, index, symbol) {
         if(index !== '9') {
             return board.slice(0, index*3-3)+symbol+index+" "+board.slice(index*3)
         }
         return board.slice(0, index*3-3)+symbol+index
     }
 
+    function victory(symbol, board) {
+        if(symbol === "x") {
+            alert("Glorious Succes!");
+        }
+        else {
+            alert("Game Over !");
+        }
+        const game = board.split(" ").map(el => {return(el[0] === '0' ? ("."+el[1]) : el)} ).join(" ")
+        axios.post(`http://localhost:5000/games/${gameId}`, {game})
+            .then(response => {
+            console.log("final board", response.data)
+            setBoard(response.data.game)
+            })
+            .catch(err => console.log(err))
+    }
+
+    function checkForVictory(board) {
+        const arr = board.split(" ").map(el => el[0])
+        // horizontall
+        if(arr[0] === arr[1] && arr[0] === arr[2] && arr[0] !== '0') {
+            victory(arr[0], board)
+            return true
+        }
+        if(arr[3] === arr[4] && arr[3] === arr[5] && arr[3] !== '0') {
+            victory(arr[3], board)
+            return true
+        }
+        if(arr[6] === arr[7] && arr[6] === arr[8] && arr[6] !== '0') {
+            victory(arr[6], board)
+            return true
+        }
+        // vertical
+        if(arr[0] === arr[3] && arr[0] === arr[6] && arr[0] !== '0') {
+            victory(arr[0], board)
+            return true
+        }
+        if(arr[1] === arr[4] && arr[1] === arr[7] && arr[1] !== '0') {
+            victory(arr[1], board)
+            return true
+        }
+        if(arr[2] === arr[5] && arr[2] === arr[8] && arr[2] !== '0') {
+            victory(arr[2], board)
+            return true
+        }
+        // diagonal
+        if(arr[0] === arr[4] && arr[0] === arr[8] && arr[0] !== '0') {
+            victory(arr[0], board)
+            return true
+        }
+        if(arr[2] === arr[4] && arr[2] === arr[6] && arr[2] !== '0') {
+            victory(arr[2], board)
+            return true
+        }
+        if(arr.includes("0") === false) {
+            alert("Tie!")
+            return true
+        }
+        return false
+    }
+
+    function aiMove(board) {
+        const moves = board.split(" ").filter(el => {return el[0] === '0' ? true : false})
+        const index = Math.floor(Math.random() * moves.length)
+        if(moves.length !== 0) {
+            const game = newBoard(board, moves[index][1], 'o')
+            axios.post(`http://localhost:5000/games/${gameId}`, {game})
+            .then(response => {
+            console.log("Ai move", response.data)
+            setBoard(response.data.game)
+            checkForVictory(response.data.game)
+            })
+            .catch(err => console.log(err))
+        }
+    }
+
     function handleClick(index) {
-        const game = newBoard(index, 'x')
+        const game = newBoard(board, index, 'x')
         axios.post(`http://localhost:5000/games/${gameId}`, {game})
         .then(response => {
-          console.log(response.data)
+          console.log("player move", response.data)
           setBoard(response.data.game)
+          if (checkForVictory(response.data.game) === false) {
+              aiMove(response.data.game)
+          }
         })
         .catch(err => console.log(err))
     }
 
     function draw(board) {
-        console.log(board, "draw")
+        // console.log("draw:", board)
         if (board !== null && board !== undefined) {
             return board.split(" ").map(i => {return match(i)})
         }
@@ -47,6 +125,9 @@ function Game() {
         }
         if( item[0] === 'o' ) {
             return <div className="field" key={item[1]}>O</div>
+        }
+        if( item[0] === '.' ) {
+            return <div className="field" key={item[1]}></div>
         }
         return (
             <div className="corners" key={item[1]}>
