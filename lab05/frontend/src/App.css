@@ -74,6 +74,7 @@ body {
   background-repeat: no-repeat;
   background-size: 20px 20px;
   border-radius: 8px;
+  height: 100px;
 }
 
 .board {
@@ -85,20 +86,29 @@ body {
   border-radius: 10px;
 }
 
-.field {
+.small_button {
   color: inherit;
   background: #282c34;
   font-size: inherit;
   border: white solid 5px;
   border-radius: 10px;
   padding: 0;
-  margin: auto;
+  margin: 0;
   width: 100px;
   height: 100px;
   margin: 0px;
 }
 
-.field:hover {
+.field {
+  border: white solid 5px;
+  border-radius: 10px;
+  background: #282c34;
+  padding-top: 21px;
+  width: 90px;
+  height: 69px;
+}
+
+.small_button:hover {
   box-shadow: #61dafb 0 0 20px;
 
   border: none;
@@ -130,12 +140,3 @@ body {
     box-shadow: #61dafb 0 0 20px;
   }
 }
-
-/* @keyframes fade {
-  0% {
-    box-shadow: #61dafb 0 0 20px;
-  }
-  100% {
-    box-shadow: none;
-  }
-} */
