@@ -13,13 +13,13 @@ router.get('/', async (req, res) => {
 
 router.get('/:key', async (req, res) => {
     const key = req.params.key
-    const games = await client.get(key)
-    return res.json({games});
+    const game = await client.get(key)
+    return res.json({game});
 });
 
 router.post('/', async (req, res) => {
     const key = req.body.key
-    client.setex(key, 180, "000000000")
+    client.setex(key, 300, "000000000")
     return res.json(req.body);
 });
 

@@ -6,7 +6,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(15px + 2vmin);
+  font-size: 30px;
   justify-items: center;
   height: 100vh;
 }
@@ -15,7 +15,7 @@ body {
   color: #61dafb;
 }
 
-button {
+.button {
   display: block;
   color: inherit;
   background: #282c34;
@@ -28,7 +28,7 @@ button {
   height: 100px;
 }
 
-button:hover {
+.button:hover {
   box-shadow: #61dafb 0 0 20px;
 
   border: none;
@@ -40,7 +40,7 @@ button:hover {
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
   background-size: 15px 5px, 15px 5px, 5px 15px, 5px 15px;  /* grubość ramki i odległość między liniami */
 
-  animation: moving 6s infinite linear;
+  animation: moving 6s infinite linear, shine 0.25s;
 }
 
 .border {
@@ -75,3 +75,67 @@ button:hover {
   background-size: 20px 20px;
   border-radius: 8px;
 }
+
+.board {
+  background: #484a4e;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.field {
+  color: inherit;
+  background: #282c34;
+  font-size: inherit;
+  border: white solid 5px;
+  border-radius: 10px;
+  padding: 0;
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  margin: 0px;
+}
+
+.field:hover {
+  box-shadow: #61dafb 0 0 20px;
+
+  border: none;
+  padding: 5px;
+  background: linear-gradient(90deg, white 50%, transparent 40%),
+  linear-gradient(90deg, white 50%, transparent 50%),
+  linear-gradient(0deg, white 50%, transparent 50%),
+  linear-gradient(0deg, white 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 15px 5px, 15px 5px, 5px 15px, 5px 15px;  /* grubość ramki i odległość między liniami */
+
+  animation: small_moving 6s infinite linear, shine 0.25s;
+}
+
+@keyframes small_moving {
+  0% {
+    background-position: 0px 0px, 300px 95px, 0px 300px, 95px 0px; /* serokość i wysokość ramki kolejno: top, bot, right, left */
+  }
+  100% {
+    background-position: 300px 0px, 0px 95px, 0px 0px, 95px 300px;
+  }
+}
+
+@keyframes shine {
+  0% {
+    box-shadow: none;
+  }
+  100% {
+    box-shadow: #61dafb 0 0 20px;
+  }
+}
+
+/* @keyframes fade {
+  0% {
+    box-shadow: #61dafb 0 0 20px;
+  }
+  100% {
+    box-shadow: none;
+  }
+} */
