@@ -9,6 +9,7 @@ function Game() {
     const [board, setBoard] = useState('01 02 03 04 05 06 07 08 09')
     const [finish, setFinish] = useState(false)
     const [communicat, setCommunicat] = useState(null)
+    const [movesHistory, setMovesHistory] = useState([])
 
     useEffect(() => {
         axios.get(`http://localhost:5000/games/${gameId}`)
@@ -96,7 +97,7 @@ function Game() {
         return false
     }
 
-    function aiMove(board) {
+    function aiMove(board, previousMove) {
         const moves = board.split(" ").filter(el => {return el[0] === '0' ? true : false})
         const index = Math.floor(Math.random() * moves.length)
         if(moves.length !== 0) {
@@ -105,6 +106,7 @@ function Game() {
             .then(response => {
             console.log("Ai move", response.data)
             setBoard(response.data.game)
+            setMovesHistory([...movesHistory, previousMove, moves[index][1]])
             checkForVictory(response.data.game)
             })
             .catch(err => console.log(err))
@@ -118,29 +120,18 @@ function Game() {
           console.log("player move", response.data)
           setBoard(response.data.game)
           if (checkForVictory(response.data.game) === false) {
-              aiMove(response.data.game)
+              aiMove(response.data.game, index)
           }
         })
         .catch(err => console.log(err))
     }
-
-    // async function redirect() {
-    //     setTimeout(() => {
-    //         history.push("/")
-    //     }, 5000)
-    // }
 
     function draw(board) {
         // console.log("draw:", board)
         if (board !== null && board !== undefined) {
             return board.split(" ").map(i => {return match(i)})
         }
-        // redirect()
-        return (
-            <div>
-                <div>Your game have expired or had never existed!</div>
-                {/* <div>You'll be redirected to main site in 5s</div> */}
-            </div>)
+        return <div>Your game have expired or had never existed!</div>
     }
 
     function match(item) {   
@@ -159,15 +150,33 @@ function Game() {
             </div>
         )}
 
+    function undo() {
+        if(movesHistory.length !== 0) {
+            const game = newBoard(board, movesHistory.at(-1), '0')
+            const game2 = newBoard(game, movesHistory.at(-2), '0')
+            setMovesHistory(movesHistory.slice(0,-2))
+            axios.post(`http://localhost:5000/games/${gameId}`, {game: game2})
+            .then(response => {
+            console.log("undo", response.data)
+            setBoard(response.data.game)
+            })
+            .catch(err => console.log(err))
+        }
+    }
+
     function buttonUnder(finish) {
         if(finish) {
             return (
                 <div className="corners under">
                     <button className='button' onClick={() => {history.push('/')}}>Replay?</button>
                 </div>
-            )
-        }
-    }
+        )}
+        else {
+            return (
+                <div className="corners under">
+                    <button className='button' onClick={() => {undo()}}>Undo</button>
+                </div>
+        )}}
 
     function finishCommunicat(finish, communicat) {
         if(finish) {
