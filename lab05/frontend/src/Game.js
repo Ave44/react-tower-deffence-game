@@ -1,17 +1,25 @@
 import axios from 'axios';
-import { useParams } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import { useState ,useEffect } from "react";
 
 function Game() {
 
     const gameId = useParams().gameId
+    const history = useHistory()
     const [board, setBoard] = useState('01 02 03 04 05 06 07 08 09')
+    const [finish, setFinish] = useState(false)
+    const [communicat, setCommunicat] = useState(null)
 
     useEffect(() => {
         axios.get(`http://localhost:5000/games/${gameId}`)
             .then(response => {
               console.log("initial board:", response.data)
               setBoard(response.data.game)
+              if(response.data.game !== null) {
+                  if(response.data.game.includes('0') === false) {
+                  setFinish(true)
+                  setCommunicat("This game is already finished!")
+              }} 
             })
             .catch(err => console.log(err))
     }, [gameId])
@@ -24,11 +32,14 @@ function Game() {
     }
 
     function victory(symbol, board) {
+        setFinish(true)
         if(symbol === "x") {
-            alert("Glorious Succes!");
+            // alert("Glorious Succes!");
+            setCommunicat("Glorious Succes!")
         }
         else {
-            alert("Game Over !");
+            // alert("Game Over !");
+            setCommunicat("Game Over !")
         }
         const game = board.split(" ").map(el => {return(el[0] === '0' ? ("."+el[1]) : el)} ).join(" ")
         axios.post(`http://localhost:5000/games/${gameId}`, {game})
@@ -77,7 +88,9 @@ function Game() {
             return true
         }
         if(arr.includes("0") === false) {
-            alert("Tie!")
+            // alert("Tie!");
+            setFinish(true)
+            setCommunicat("Tie!");
             return true
         }
         return false
@@ -111,12 +124,23 @@ function Game() {
         .catch(err => console.log(err))
     }
 
+    // async function redirect() {
+    //     setTimeout(() => {
+    //         history.push("/")
+    //     }, 5000)
+    // }
+
     function draw(board) {
         // console.log("draw:", board)
         if (board !== null && board !== undefined) {
             return board.split(" ").map(i => {return match(i)})
         }
-        return "Your game have expired or had never existed!"
+        // redirect()
+        return (
+            <div>
+                <div>Your game have expired or had never existed!</div>
+                {/* <div>You'll be redirected to main site in 5s</div> */}
+            </div>)
     }
 
     function match(item) {   
@@ -135,9 +159,29 @@ function Game() {
             </div>
         )}
 
+    function buttonUnder(finish) {
+        if(finish) {
+            return (
+                <div className="corners under">
+                    <button className='button' onClick={() => {history.push('/')}}>Replay?</button>
+                </div>
+            )
+        }
+    }
+
+    function finishCommunicat(finish, communicat) {
+        if(finish) {
+            return (
+                <div className="above">{communicat}</div>
+            )
+        }
+    }
+
     return (
-        <div className="board">
-            {draw(board)}
+        <div className='game'>
+            <div className="zeroHeight">{finishCommunicat(finish, communicat)}</div>
+            <div className="board">{draw(board)}</div>
+            <div className="zeroHeight">{buttonUnder(finish)}</div>
         </div>
     )
 }

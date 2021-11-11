@@ -84,6 +84,7 @@ body {
   grid-gap: 10px;
   padding: 10px;
   border-radius: 10px;
+  width: 320px;
 }
 
 .small_button {
@@ -121,6 +122,28 @@ body {
   background-size: 15px 5px, 15px 5px, 5px 15px, 5px 15px;  /* grubość ramki i odległość między liniami */
 
   animation: small_moving 6s infinite linear, shine 0.25s;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.zeroHeight {
+  height: 0;
+}
+
+.above {
+  position: relative;
+  bottom: 60px;
+  height: 20px;
+  margin-bottom: 20px;
+}
+
+.under {
+  width: 200px;
+  margin-top: 20px;
 }
 
 @keyframes small_moving {
