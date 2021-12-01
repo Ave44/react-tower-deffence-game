@@ -15,8 +15,8 @@
 	<label>podaj swój login: </label>
 	<input id='login' placeholder="Login"/>
 	<div>
-		<input id='create' placeholder="Nazwa pokoju"/>
-    	<button onClick={}>stwórz pokój</button>
+		<input id='' placeholder="Nazwa pokoju"/>
+    	<button id='create'>stwórz pokój</button>
 	</div>
 	<div>
     	<input id='roomName' placeholder="Nazwa pokoju"/>
@@ -35,6 +35,7 @@
 	const message = document.querySelector('#message');
 	const chat = document.querySelector('#chat');
 	const join = document.querySelector('#join');
+	const create = document.querySelector('#create');
 
 	send.onclick = () => {
     	// console.log(message.value)
@@ -44,6 +45,10 @@
 	function showMessage(text) {
 		chat.textContent += `\n${new Date().toLocaleTimeString()} ${text}`;
 		message.value = '';
+	}
+
+	create.onclick = () => {
+		createRoom(login.value)
 	}
 
 </script>
