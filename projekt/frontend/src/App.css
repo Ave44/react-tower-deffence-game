@@ -6,22 +6,25 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: 20px;
   color: white;
 }
 
 .map {
   display: flex;
-  flex-direction: column;
-}
-
-.row {
-  display: flex;
+  flex-wrap: wrap;
+  width: 800px;
+  background-color: rgb(43, 43, 43);
 }
 
 .tile {
-  border: white 2px solid;
-  width: 70px;
-  height: 70px;
-  font-size: 25px;
+  margin: auto;
+}
+
+.tile:hover {
+  background-color: rgb(75, 75, 75);
+}
+
+.path {
+  background-color: rgb(78, 42, 28);
 }

@@ -1,33 +1,33 @@
-const Map = () => {
-    const size = {x: 8, y: 8}
+const Map = (props) => {
+    const width = props.width
+    const height = props.height
+    const size = 800/width
 
-    const tile = (x, y) => {
-        return <div className="tile">{x}{y}</div>
+    const map = []
+
+    for(let i = 0; i < width*height; i++) {
+        map.push(i)
     }
 
-    const row = (x, y) => {
-        const arry = []
-        for (var i = 1; i <= x; i++) {
-            arry.push(i);
+    const tile = (index) => {
+        
+        if(props.path.includes(index)) {
+            if(props.enemies.map(e=>e.positionIndex).includes(index)) {
+                return <div className="tile path" style={{height: `${size}px`, width: `${size}px`}} key={index}>
+                {props.enemies.filter(e=> {return e.positionIndex === index ? 1 : -1})[0].image}
+            </div>
+            }
+            return <div className="tile path" style={{height: `${size}px`, width: `${size}px`}} key={index}>
+                {index}
+            </div>
         }
 
-        const row = arry.map(x=><div key={x}>{tile(x,y)}</div>)
-        return row
+        return <div className="tile" style={{height: `${size}px`, width: `${size}px`}} key={index}>
+            {index}
+        </div>
     }
 
-    const rows = (x, y) => {
-        const arry = []
-        for (var i = 1; i <= y; i++) {
-            arry.push(i);
-        }
-
-        const rows = arry.map(y=><div key={y} className="row">{row(x,y)}</div>)
-        return rows
-    }
-    return (<div>
-        <div>map</div>
-        <div className="map">{rows(size.x, size.y)}</div>
-    </div>)
+    return <div className="map">{map.map(i => tile(i))}</div>
 }
 
 export default Map
