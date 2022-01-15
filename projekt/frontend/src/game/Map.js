@@ -1,3 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
+import Enemy from './Enemy'
+
 const Map = (props) => {
     const width = props.width
     const height = props.height
@@ -14,7 +17,7 @@ const Map = (props) => {
         if(props.path.includes(index)) {
             if(props.enemies.map(e=>e.positionIndex).includes(index)) {
                 return <div className="tile path" style={{height: `${size}px`, width: `${size}px`}} key={index}>
-                {props.enemies.filter(e=> {return e.positionIndex === index ? 1 : -1})[0].image}
+                {props.enemies.filter(e=> {return e.positionIndex === index ? true : false}).map(e=><div key={uuidv4().substring(0,8)}><Enemy enemy={e}/></div>)}
             </div>
             }
             return <div className="tile path" style={{height: `${size}px`, width: `${size}px`}} key={index}>
