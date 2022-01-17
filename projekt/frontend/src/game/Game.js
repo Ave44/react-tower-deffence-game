@@ -1,44 +1,28 @@
 import { useState, useEffect } from "react"
 import Map from "./Map"
 
-const Game = () => {
+const Game = (props) => {
+    // console.log("main") 
     const tickSpeed = 500
-    const map = {width: 8, height: 8}
+    const map = props.map
     const [hp, setHp] = useState(20)
     const livesLostThisRound = []
     const [currentWave, setCurrentWave] = useState(0)
     const [waveIndex, setWaveIndex] = useState(0)
-    const [path, setPath] = useState([1,9,17,25,33,34,42,50,51,52,53,45,37,29,30,31])
-    const [animationTable] = useState([])
-
-    useEffect(()=>{
-        const calculateDirection = (a,b) => {
-            if(a + 1 === b) {return 'moveRight'}
-            if(a - 1 === b) {return 'moveLeft'}
-            if(a + map.width === b) {return 'moveDown'}
-            if(a - map.width === b) {return 'moveUp'}
-            return 'end'
-        }
-
-        for(let i = 0; i < path.length; i++) {
-            if(calculateDirection(path[i],path[i+1]) !== 'end') { animationTable.push(calculateDirection(path[i],path[i+1])) }
-            else { animationTable.push(animationTable.slice(-1)[0]) }
-        }
-    },[path, map.width])
+    const path = props.path
 
     const loseLives = () => {
         if(livesLostThisRound.length > 0) {
             setHp(hp-livesLostThisRound.length)
         }
     }
-    
-    const goblin = {hp: 8, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin'}
-    const waves = [[[goblin],[],[goblin],[goblin],[],[goblin,goblin],[goblin],[],[],[goblin,goblin,goblin], [goblin], 'end']]
+   
+    const waves = props.waves
     const [enemies, setEnemies] = useState([])
 
     const moveEnemy = (enemy) => {
         if(enemy.position < (path.length-1) ) {
-            return {...enemy, position: enemy.position + enemy.speed, positionIndex: path[Math.floor(enemy.position + enemy.speed)]}
+            return {...enemy, position: enemy.position + enemy.speed, positionIndex: path[Math.floor(enemy.position + enemy.speed)], animationProgres: (enemy.animationProgres + enemy.speed) % 1}
         }
         livesLostThisRound.push(enemy.loss)
     }
@@ -48,8 +32,8 @@ const Game = () => {
 
         const newEnemies = waves[currentWave][waveIndex]
         if(newEnemies !== 'end') {
-            // console.log(newEnemies)
-            const enemiesAfterSpawning = [...enemiesAfterMove, ...newEnemies.map(enemy => {return {...enemy, position: 0, positionIndex: path[0], offset: Math.random().toFixed(2)}})]
+            const enemiesAfterSpawning = [...enemiesAfterMove, ...newEnemies.map(enemy => {
+                return {...enemy, position: 0, positionIndex: path[0], animationProgres: 0, offsetX: Math.random().toFixed(2)}})]
             setEnemies(enemiesAfterSpawning)
         }
         else {
@@ -64,9 +48,9 @@ const Game = () => {
     }
 
     const tick = () => {
-        console.log('tick')
+        // console.log('----------tick----------')
         handleTickEnemies()
-        loseLives()
+        loseLives() // powoduje ponowne wygenerowanie komponentu
         handleTickWave()
     }
 
@@ -78,11 +62,10 @@ const Game = () => {
     })
 
     return (<div>
-        <div>game</div>
         <div>Health: {hp}</div>
         <div>Wave: {currentWave}</div>
         <button onClick={()=>{setCurrentWave(currentWave + 1);console.log(enemies)}}>next wave</button>
-        <Map width={map.width} height={map.height} enemies={enemies} path={path} animationTable={animationTable}/>
+        <Map map={map} enemies={enemies} path={path} animationTable={props.animationTable} tickSpeed={tickSpeed}/>
     </div>)
 }
 

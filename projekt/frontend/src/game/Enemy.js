@@ -1,23 +1,33 @@
 const Enemy = (props) => {
     const enemy = props.enemy
-    const tickSpeed = 500
-
-    // const calculateXOffset = (offset) => {// min -40 max 40px
-    //     const result = parseInt(offset*100) <= 50 ? -parseInt(offset*100) + 10 : parseInt(offset*100) - 60
-    //     return result
-    // }
-
-    // const calculateYOffset = (offset) => {// min -10px max 60px
-    //     const result = parseInt(offset*70) - 10
-    //     return result
-    // }
+    const tickSpeed = props.tickSpeed
+    const animation = props.animationTable[Math.floor(enemy.position)]
 
     const calculateOffset = () => {
-        // console.log('nextAnimation', enemy.positionIndex,props.path[Math.floor(enemy.position) + 1])
-        return enemy.offset
+
+        const offset = parseInt(enemy.position * 100) % 100
+// console.log(parseInt(enemy.position * 100), offset, enemy.animationProgres)
+        if(animation === "moveRight") { return {top: 25, left: 0 + offset } }
+        if(animation === "moveLeft") { return {top: 25, left: 100 - offset } }
+        if(animation === "moveUp") { return {top: 75 - offset, left: 50} }
+        if(animation === "moveDown") { return {top: -25 + offset, left: 50} }
+
+        if(animation === "moveDownRight") { return {top: -25 + offset / 2, left: 50 + offset / 2 } }
+        if(animation === "moveDownLeft") { return {top: -25 + offset * enemy.speed, left: 50 - offset / 2} }
+
+        if(animation === "moveUpRight") { return {top: 75 - offset / 2, left: 50 + offset / 2} }
+        if(animation === "moveUpLeft") { return {top: 75 - offset / 2, left: 50 - offset / 2} }
+
+        if(animation === "moveRightDown") { return {top: 25 + offset / 2, left: 0 + offset / 2} }
+        if(animation === "moveRightUp") { return {top: 25 - offset / 2, left: 0 + offset / 2} }
+
+        if(animation === "moveLeftDown") { return {top: 25 + offset / 2, left: 100 - offset / 2} }
+        if(animation === "moveLeftUp") { return {top: 25 - offset / 2, left: 100 - offset / 2} }
+
+        return {top:0,left:0}
     }
 
-    const currentAnimation = props.animationTable[Math.floor(enemy.position)]
+    const offset = calculateOffset()
 
     const displayHp = () => {
         if(enemy.hp !== enemy.maxHp) {
@@ -31,8 +41,8 @@ const Enemy = (props) => {
     }
 
     return <div className="enemy" style={{position: "relative", zIndex: `${enemy.offset*100}`,
-    top: `${(enemy.position * 100) % 100}px`, //left: `${(enemy.position * 100) % 100}px`,
-    animationName: `${currentAnimation}`, animationDuration: `${tickSpeed / enemy.speed}ms`
+    top: `${offset.top}px`, left: `${offset.left}px`,
+    animationName: `${animation}`, animationDuration: `${tickSpeed / enemy.speed}ms`
     }}>
         {displayHp()}
         <img src={require(`./images/${enemy.img}.png`)} alt={props.img} style={{width: '50px'}}/>

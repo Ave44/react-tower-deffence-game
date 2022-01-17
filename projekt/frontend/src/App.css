@@ -32,10 +32,11 @@ body {
 
 .enemy {
   height: 0;
+  width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation-iteration-count: infinite;
+  /* animation-iteration-count: infinite; */
   animation-timing-function: linear;
 }
 
@@ -60,3 +61,15 @@ body {
 @keyframes moveLeft {
   to { transform: translateX(-100px); }
 }
+
+@keyframes moveDownRight { to { transform: translate(50px, 50px) } }
+@keyframes moveRightDown { to { transform: translate(50px, 50px) } }
+
+@keyframes moveLeftDown { to { transform: translate(-50px, 50px) } }
+@keyframes moveDownLeft { to { transform: translate(-50px, 50px) } }
+
+@keyframes moveRightUp { to { transform: translate(50px, -50px) } }
+@keyframes moveUpRight { to { transform: translate(50px, -50px) } }
+
+@keyframes moveLeftUp { to { transform: translate(-50px, -50px) } }
+@keyframes moveUpLeft { to { transform: translate(-50px, -50px) } }
