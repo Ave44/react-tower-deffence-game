@@ -5,20 +5,19 @@ const Game = (props) => {
     // console.log("main") 
     const tickSpeed = 500
     const map = props.map
-    const [hp, setHp] = useState(20)
-    const livesLostThisRound = []
-    const [currentWave, setCurrentWave] = useState(0)
-    const [waveIndex, setWaveIndex] = useState(0)
     const path = props.path
+    const waves = props.waves
+    
+    const livesLostThisRound = []
+
+    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: []})
 
     const loseLives = () => {
         if(livesLostThisRound.length > 0) {
-            setHp(hp-livesLostThisRound.length)
+            return gameData.hp - livesLostThisRound.reduce((pre,cur) => {return pre + cur}, 0)
         }
-    }
-   
-    const waves = props.waves
-    const [enemies, setEnemies] = useState([])
+        return gameData.hp
+    }   
 
     const moveEnemy = (enemy) => {
         if(enemy.position < (path.length-1) ) {
@@ -27,31 +26,36 @@ const Game = (props) => {
         livesLostThisRound.push(enemy.loss)
     }
 
-    const handleTickEnemies = () => {
-        const enemiesAfterMove = enemies.map(e => moveEnemy(e)).filter(e => e)
+    const randomOffset = () => {
+        //return Math.random().toFixed(2) * 50 - 25
+        return 0
+    }
 
-        const newEnemies = waves[currentWave][waveIndex]
+    const handleTickEnemies = () => {
+        const enemiesAfterMove = gameData.enemies.map(e => moveEnemy(e)).filter(e => e)
+
+        const newEnemies = waves[gameData.currentWave][gameData.waveIndex]
         if(newEnemies !== 'end') {
             const enemiesAfterSpawning = [...enemiesAfterMove, ...newEnemies.map(enemy => {
-                return {...enemy, position: 0, positionIndex: path[0], animationProgres: 0, offsetX: Math.random().toFixed(2)}})]
-            setEnemies(enemiesAfterSpawning)
+                return {...enemy, position: 0, positionIndex: path[0], animationProgres: 0, offsetX: randomOffset(), offsetY: randomOffset()}})]
+            return enemiesAfterSpawning
         }
         else {
-            setEnemies(enemiesAfterMove)
+            return enemiesAfterMove
         }
     }
 
     const handleTickWave = () => {
-        if(waves[currentWave][waveIndex + 1] !== 'end') {
-            setWaveIndex(waveIndex + 1)
+        if(waves[gameData.currentWave][gameData.waveIndex + 1] !== 'end') {
+            return gameData.waveIndex + 1
         }
+        return gameData.waveIndex
     }
 
     const tick = () => {
-        // console.log('----------tick----------')
-        handleTickEnemies()
-        loseLives() // powoduje ponowne wygenerowanie komponentu
-        handleTickWave()
+        console.log('----------tick----------')
+        setGameData({...gameData, waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives()})
+        // ^ Kolejność jest ważna!
     }
 
     useEffect(()=>{
@@ -62,10 +66,10 @@ const Game = (props) => {
     })
 
     return (<div>
-        <div>Health: {hp}</div>
-        <div>Wave: {currentWave}</div>
-        <button onClick={()=>{setCurrentWave(currentWave + 1);console.log(enemies)}}>next wave</button>
-        <Map map={map} enemies={enemies} path={path} animationTable={props.animationTable} tickSpeed={tickSpeed}/>
+        <div>Health: {gameData.hp}</div>
+        <div>Wave: {gameData.currentWave}</div>
+        <button onClick={()=>{setGameData({...gameData, currentWave: gameData.currentWave + 1})}}>next wave</button>
+        <Map map={map} enemies={gameData.enemies} path={path} animationTable={props.animationTable} tickSpeed={tickSpeed}/>
     </div>)
 }
 

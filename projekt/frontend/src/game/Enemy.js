@@ -4,16 +4,15 @@ const Enemy = (props) => {
     const animation = props.animationTable[Math.floor(enemy.position)]
 
     const calculateOffset = () => {
-
         const offset = parseInt(enemy.position * 100) % 100
-// console.log(parseInt(enemy.position * 100), offset, enemy.animationProgres)
+        
         if(animation === "moveRight") { return {top: 25, left: 0 + offset } }
         if(animation === "moveLeft") { return {top: 25, left: 100 - offset } }
         if(animation === "moveUp") { return {top: 75 - offset, left: 50} }
         if(animation === "moveDown") { return {top: -25 + offset, left: 50} }
 
         if(animation === "moveDownRight") { return {top: -25 + offset / 2, left: 50 + offset / 2 } }
-        if(animation === "moveDownLeft") { return {top: -25 + offset * enemy.speed, left: 50 - offset / 2} }
+        if(animation === "moveDownLeft") { return {top: -25 + offset / 2, left: 50 - offset / 2} }
 
         if(animation === "moveUpRight") { return {top: 75 - offset / 2, left: 50 + offset / 2} }
         if(animation === "moveUpLeft") { return {top: 75 - offset / 2, left: 50 - offset / 2} }
@@ -41,7 +40,7 @@ const Enemy = (props) => {
     }
 
     return <div className="enemy" style={{position: "relative", zIndex: `${enemy.offset*100}`,
-    top: `${offset.top}px`, left: `${offset.left}px`,
+    top: `${offset.top + enemy.offsetX}px`, left: `${offset.left + enemy.offsetY}px`,
     animationName: `${animation}`, animationDuration: `${tickSpeed / enemy.speed}ms`
     }}>
         {displayHp()}
