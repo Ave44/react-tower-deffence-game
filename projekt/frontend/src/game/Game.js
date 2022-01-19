@@ -9,8 +9,9 @@ const Game = (props) => {
     const waves = props.waves
     
     const livesLostThisRound = []
+    const newTowers = []
 
-    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: []})
+    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: [], towers: []})
 
     const loseLives = () => {
         if(livesLostThisRound.length > 0) {
@@ -27,8 +28,7 @@ const Game = (props) => {
     }
 
     const randomOffset = () => {
-        //return Math.random().toFixed(2) * 50 - 25
-        return 0
+        return Math.random().toFixed(2) * 50 - 25
     }
 
     const handleTickEnemies = () => {
@@ -52,9 +52,16 @@ const Game = (props) => {
         return gameData.waveIndex
     }
 
+    const handleTickTowers = () => {
+        if(newTowers.length > 0) {
+            return [...gameData.towers, ...newTowers]
+        }
+        return gameData.towers
+    }
+
     const tick = () => {
         console.log('----------tick----------')
-        setGameData({...gameData, waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives()})
+        setGameData({...gameData, waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives(), towers: handleTickTowers()})
         // ^ Kolejność jest ważna!
     }
 
@@ -69,7 +76,7 @@ const Game = (props) => {
         <div>Health: {gameData.hp}</div>
         <div>Wave: {gameData.currentWave}</div>
         <button onClick={()=>{setGameData({...gameData, currentWave: gameData.currentWave + 1})}}>next wave</button>
-        <Map map={map} enemies={gameData.enemies} path={path} animationTable={props.animationTable} tickSpeed={tickSpeed}/>
+        <Map map={map} enemies={gameData.enemies} path={path} animationTable={props.animationTable} tickSpeed={tickSpeed} newTowers={newTowers}/>
     </div>)
 }
 

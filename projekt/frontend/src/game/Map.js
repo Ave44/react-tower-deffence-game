@@ -18,12 +18,13 @@ const Map = (props) => {
             </div>
             }
             return <div className="tile path" style={{height: `${size}px`, width: `${size}px`}} key={index}>
-                {index}
+                {/* {index} */}
             </div>
         }
 
-        return <div className="tile" style={{height: `${size}px`, width: `${size}px`}} key={index}>
-            {index}
+        return <div className="tile" style={{height: `${size}px`, width: `${size}px`}} key={index}
+        onClick={()=>{console.log(index);props.newTowers.push({index, name: "archers"})}}>
+            {/* {index} */}
         </div>
     }
 
