@@ -2,16 +2,16 @@ import { useState, useEffect } from "react"
 import Map from "./Map"
 
 const Game = (props) => {
-    // console.log("main") 
     const tickSpeed = 500
     const map = props.map
     const path = props.path
     const waves = props.waves
+    const allTowers = props.allTowers
     
     const livesLostThisRound = []
-    const newTowers = []
+    let newTowers = []
 
-    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: [], towers: []})
+    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: [], towers: {}})
 
     const loseLives = () => {
         if(livesLostThisRound.length > 0) {
@@ -21,7 +21,7 @@ const Game = (props) => {
     }   
 
     const moveEnemy = (enemy) => {
-        if(enemy.position < (path.length-1) ) {
+        if(enemy.position < (path.length) ) {
             return {...enemy, position: enemy.position + enemy.speed, positionIndex: path[Math.floor(enemy.position + enemy.speed)], animationProgres: (enemy.animationProgres + enemy.speed) % 1}
         }
         livesLostThisRound.push(enemy.loss)
@@ -53,8 +53,9 @@ const Game = (props) => {
     }
 
     const handleTickTowers = () => {
-        if(newTowers.length > 0) {
-            return [...gameData.towers, ...newTowers]
+        if(newTowers.length !== 0) {
+            const newKeys = newTowers.reduce((pre,cur)=>{return {...pre, [cur.index]: allTowers[cur.name]}}, {})
+            return {...gameData.towers, ...newKeys}
         }
         return gameData.towers
     }
@@ -76,7 +77,7 @@ const Game = (props) => {
         <div>Health: {gameData.hp}</div>
         <div>Wave: {gameData.currentWave}</div>
         <button onClick={()=>{setGameData({...gameData, currentWave: gameData.currentWave + 1})}}>next wave</button>
-        <Map map={map} enemies={gameData.enemies} path={path} animationTable={props.animationTable} tickSpeed={tickSpeed} newTowers={newTowers}/>
+        <Map map={map} enemies={gameData.enemies} path={path} pathBackgrounds={props.pathBackgrounds} animationTable={props.animationTable} tickSpeed={tickSpeed} newTowers={newTowers} towers={gameData.towers}/>
     </div>)
 }
 

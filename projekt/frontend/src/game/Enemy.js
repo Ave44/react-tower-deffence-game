@@ -33,16 +33,15 @@ const Enemy = (props) => {
             const percentageOfLostHp = enemy.hp/enemy.maxHp
             const hpWidth = parseInt(30 * percentageOfLostHp)
             const lostHpWidth = 30 - hpWidth
-            return <div className="hpBar"><div style={{backgroundColor: "green", height: '3px', width: `${hpWidth}px`}}/>
-                <div style={{backgroundColor: "gray", height: '3px', width: `${lostHpWidth}px`}}/>
+            return <div className="hpBar">
+                <div className="green" style={{width: `${hpWidth}px`}}/>
+                <div className="gray" style={{width: `${lostHpWidth}px`}}/>
             </div>
         }
     }
 
-    return <div className="enemy" style={{position: "relative", zIndex: `${enemy.offset*100}`,
-    top: `${offset.top + enemy.offsetX}px`, left: `${offset.left + enemy.offsetY}px`,
-    animationName: `${animation}`, animationDuration: `${tickSpeed / enemy.speed}ms`
-    }}>
+    return <div className="enemy" style={{ top: `${offset.top + enemy.offsetX}px`, left: `${offset.left + enemy.offsetY}px`,
+    animationName: `${animation}`, animationDuration: `${tickSpeed / enemy.speed}ms` }}>
         {displayHp()}
         <img src={require(`./images/${enemy.img}.png`)} alt={props.img} style={{width: '50px'}}/>
     </div>
