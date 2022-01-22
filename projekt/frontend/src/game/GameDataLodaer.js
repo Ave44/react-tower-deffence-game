@@ -10,7 +10,20 @@ const GameDataLoader = () => {
     const [animationTable, setAnimationTable] = useState([])
     const [goblin] = useState({hp: 8, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin'}) // speed = [0.1, 0.2, 0.25, 0.5, 1] ewantualnie 1/3
     const [waves, setWaves] = useState([[[goblin],[],[goblin],[goblin],[],[goblin,goblin],[goblin],[],[],[goblin,goblin,goblin], [goblin], 'end']])
-    const [allTowers, setAllTowers] = useState({archers: {name: "archers", img: "archers", range: 1, damage: 2, type: 'phisical'}})
+    const [allTowers, setAllTowers] = useState({archers: {label: "archers", name: "Archers", img: "archers", range: 1, damage: 2, type: 'phisical',
+        upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},
+    forestArchers: {label: 'forestArchers', name: 'Forest Archers', img: 'forestArchers', range: 2, damage: 3, type: 'phisical'},
+    armyArchers: {label: 'armyArchers', name: 'Army Archers', img: 'armyArchers', range: 1, damage: 8, type: 'phisical', upgrades: [{label: 'eliteArchers', name: 'Elite Archers', cost: 200}]},
+    eliteArchers: {label: 'eliteArchers', name: 'Elite Archers', img: 'eliteArchers', range: 2, damage: 16, type: 'physical'},
+    mage: {label: 'mage', name: 'Mage', img: 'mage', range: 1, damage: 6, type: 'magical'},
+    peasants: {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, damage: 8, type: 'physical', cost: 60, upgrades: [{label: 'picinieres', name: 'Picinieres', cost: 100}]},
+    picinieres: {label: 'picinieres', name: 'Picinieres', img: 'picinieres', range: 1, damage: 18, type: 'physical', cost: 120, upgrades: [{label: 'elitePicinieres', name: 'Elite Picinieres', cost: 250}]},
+    elitePicinieres: {label: 'elitePicinieres', name: 'Elite Picinieres', img: 'elitePicinieres', range: 1, damage: 36, type: 'physical'}})
+    const [startingTowers, setStartingTowers] = useState([{label: "archers", name: "Archers", img: "archers", range: 1, damage: 2, type: 'phisical', cost: 80,
+    upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},
+    {label: 'mage', name: 'Mage', img: 'mage', range: 1, damage: 6, type: 'magical', cost: 100},
+    {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, damage: 8, type: 'physical', cost: 60},
+    {label: 'forestArchers', name: 'Forest Archers', img: 'mage', range: 1, damage: 6, type: 'physical', cost: 320}])
 
     useEffect(()=>{
         const calculateDirection = (a,b) => {
@@ -60,7 +73,7 @@ const GameDataLoader = () => {
         setMap({...map, map: generatedMap})
     },[])
 
-    return <Game map={map} path={path} animationTable={animationTable} waves={waves} allTowers={allTowers} pathBackgrounds={pathBackgrounds}/>
+    return <Game map={map} path={path} animationTable={animationTable} waves={waves} allTowers={allTowers} startingTowers={startingTowers} pathBackgrounds={pathBackgrounds}/>
 }
 
 export default GameDataLoader

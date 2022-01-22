@@ -6,10 +6,12 @@ const Game = (props) => {
     const map = props.map
     const path = props.path
     const waves = props.waves
+    const startingTowers = props.startingTowers
     const allTowers = props.allTowers
     
     const livesLostThisRound = []
     let newTowers = []
+    let towersToSell = []
 
     const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: [], towers: {}})
 
@@ -53,16 +55,22 @@ const Game = (props) => {
     }
 
     const handleTickTowers = () => {
+        if(towersToSell.length !== 0) {
+            for(let i = 0; i < towersToSell.length; i++) {
+                delete gameData.towers[towersToSell[i]]
+            }  
+        }
         if(newTowers.length !== 0) {
-            const newKeys = newTowers.reduce((pre,cur)=>{return {...pre, [cur.index]: allTowers[cur.name]}}, {})
+            const newKeys = newTowers.reduce((pre,cur)=>{return {...pre, [cur.index]: allTowers[cur.label]}}, {})
             return {...gameData.towers, ...newKeys}
         }
         return gameData.towers
     }
 
+
     const tick = () => {
         console.log('----------tick----------')
-        setGameData({...gameData, waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives(), towers: handleTickTowers()})
+        setGameData({...gameData, towers: handleTickTowers(), waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives()})
         // ^ Kolejność jest ważna!
     }
 
@@ -77,7 +85,8 @@ const Game = (props) => {
         <div>Health: {gameData.hp}</div>
         <div>Wave: {gameData.currentWave}</div>
         <button onClick={()=>{setGameData({...gameData, currentWave: gameData.currentWave + 1})}}>next wave</button>
-        <Map map={map} enemies={gameData.enemies} path={path} pathBackgrounds={props.pathBackgrounds} animationTable={props.animationTable} tickSpeed={tickSpeed} newTowers={newTowers} towers={gameData.towers}/>
+        <Map map={map} enemies={gameData.enemies} path={path} pathBackgrounds={props.pathBackgrounds} animationTable={props.animationTable} tickSpeed={tickSpeed}
+        newTowers={newTowers} towersToSell={towersToSell} towers={gameData.towers} startingTowers={startingTowers}/>
     </div>)
 }
 
