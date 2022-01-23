@@ -2,6 +2,7 @@ const Tower = (props) => {
     const tower = props.tower
     const size = props.size
     const img = require(`./images/${tower.img}.png`)
+    const rangeImg = require(`./images/ranges/range${tower.range}.png`)
 
     const upgrade = (label) => {
         props.newTowers.push({index: props.index, label})
@@ -25,8 +26,8 @@ const Tower = (props) => {
     }
 
     const range = () => {
-        return <div className="range" style={{height: `${size * (tower.range + 2)}px`, width: `${size * (tower.range + 2)}px`,
-        top: `${(-size * (tower.range + 1)) / 2}px`, left: `${(-size * (tower.range + 1)) / 2}px`}}/>
+        return <img src={rangeImg} alt='range' className="range"
+        style={{width: `${7*size}px`, height: `${7*size}px`, left: `${-3*size}px`, top: `${-3*size}px`}}/>
     }
 
     return <div className="tower">

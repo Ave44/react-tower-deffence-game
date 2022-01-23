@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react"
+import { v4 as uuid } from 'uuid'
 import Map from "./Map"
 
 const Game = (props) => {
-    const tickSpeed = 500
+    const tickSpeed = 2000
     const map = props.map
     const path = props.path
     const waves = props.waves
     const startingTowers = props.startingTowers
     const allTowers = props.allTowers
-    
     const livesLostThisRound = []
-    let newTowers = []
-    let towersToSell = []
+    const newTowers = []
+    const towersToSell = []
 
     const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: [], towers: {}})
 
@@ -39,7 +39,7 @@ const Game = (props) => {
         const newEnemies = waves[gameData.currentWave][gameData.waveIndex]
         if(newEnemies !== 'end') {
             const enemiesAfterSpawning = [...enemiesAfterMove, ...newEnemies.map(enemy => {
-                return {...enemy, position: 0, positionIndex: path[0], animationProgres: 0, offsetX: randomOffset(), offsetY: randomOffset()}})]
+                return {...enemy, position: 0, positionIndex: path[0], animationProgres: 0, offsetX: randomOffset(), offsetY: randomOffset(), id: uuid().substring(0,4)}})]
             return enemiesAfterSpawning
         }
         else {
@@ -54,6 +54,12 @@ const Game = (props) => {
         return gameData.waveIndex
     }
 
+    const createTower = (index, label) => {
+        const tower = allTowers[label];console.log(tower)
+        const inRange = props.getRange(index, tower.range, map.width).filter(e=>path.includes(e))
+        return {[index]: {...tower, inRange} }
+    }
+
     const handleTickTowers = () => {
         if(towersToSell.length !== 0) {
             for(let i = 0; i < towersToSell.length; i++) {
@@ -61,15 +67,25 @@ const Game = (props) => {
             }  
         }
         if(newTowers.length !== 0) {
-            const newKeys = newTowers.reduce((pre,cur)=>{return {...pre, [cur.index]: allTowers[cur.label]}}, {})
+            const newKeys = newTowers.reduce((pre,cur)=>{return {...pre, ...createTower(cur.index, cur.label)}}, {})
             return {...gameData.towers, ...newKeys}
         }
         return gameData.towers
     }
 
+    const handleAttacks = () => {
+        const enemiesOnPath = gameData.enemies.map(e=>{return {id: e.id, position: e.position, index: e.positionIndex}})
+        for (const [key, value] of Object.entries(gameData.towers)) {
+            console.log(value.inRange)
+            const enemiesInRange = enemiesOnPath.filter(e=>value.inRange.includes(e.index))
+            console.log(enemiesInRange[0])
+        }
+        console.log(gameData.enemies, enemiesOnPath)
+    }
 
     const tick = () => {
         console.log('----------tick----------')
+        handleAttacks()
         setGameData({...gameData, towers: handleTickTowers(), waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives()})
         // ^ Kolejność jest ważna!
     }

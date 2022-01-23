@@ -10,20 +10,20 @@ const GameDataLoader = () => {
     const [animationTable, setAnimationTable] = useState([])
     const [goblin] = useState({hp: 8, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin'}) // speed = [0.1, 0.2, 0.25, 0.5, 1] ewantualnie 1/3
     const [waves, setWaves] = useState([[[goblin],[],[goblin],[goblin],[],[goblin,goblin],[goblin],[],[],[goblin,goblin,goblin], [goblin], 'end']])
-    const [allTowers, setAllTowers] = useState({archers: {label: "archers", name: "Archers", img: "archers", range: 1, damage: 2, type: 'phisical',
+    const [allTowers, setAllTowers] = useState({archers: {label: "archers", name: "Archers", img: "archers", range: 2, damage: 2, type: 'phisical', cost: 80,
         upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},
-    forestArchers: {label: 'forestArchers', name: 'Forest Archers', img: 'forestArchers', range: 2, damage: 3, type: 'phisical'},
-    armyArchers: {label: 'armyArchers', name: 'Army Archers', img: 'armyArchers', range: 1, damage: 8, type: 'phisical', upgrades: [{label: 'eliteArchers', name: 'Elite Archers', cost: 200}]},
-    eliteArchers: {label: 'eliteArchers', name: 'Elite Archers', img: 'eliteArchers', range: 2, damage: 16, type: 'physical'},
-    mage: {label: 'mage', name: 'Mage', img: 'mage', range: 1, damage: 6, type: 'magical'},
+    forestArchers: {label: 'forestArchers', name: 'Forest Archers', img: 'forestArchers', range: 4, damage: 3, type: 'phisical'},
+    armyArchers: {label: 'armyArchers', name: 'Army Archers', img: 'armyArchers', range: 3, damage: 8, type: 'phisical', upgrades: [{label: 'eliteArchers', name: 'Elite Archers', cost: 200}]},
+    eliteArchers: {label: 'eliteArchers', name: 'Elite Archers', img: 'eliteArchers', range: 5, damage: 16, type: 'physical'},
+    mage: {label: 'mage', name: 'Mage', img: 'mage', range: 2, damage: 6, type: 'magical', cost: 120},
     peasants: {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, damage: 8, type: 'physical', cost: 60, upgrades: [{label: 'picinieres', name: 'Picinieres', cost: 100}]},
     picinieres: {label: 'picinieres', name: 'Picinieres', img: 'picinieres', range: 1, damage: 18, type: 'physical', cost: 120, upgrades: [{label: 'elitePicinieres', name: 'Elite Picinieres', cost: 250}]},
-    elitePicinieres: {label: 'elitePicinieres', name: 'Elite Picinieres', img: 'elitePicinieres', range: 1, damage: 36, type: 'physical'}})
-    const [startingTowers, setStartingTowers] = useState([{label: "archers", name: "Archers", img: "archers", range: 1, damage: 2, type: 'phisical', cost: 80,
-    upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},
-    {label: 'mage', name: 'Mage', img: 'mage', range: 1, damage: 6, type: 'magical', cost: 100},
-    {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, damage: 8, type: 'physical', cost: 60},
-    {label: 'forestArchers', name: 'Forest Archers', img: 'mage', range: 1, damage: 6, type: 'physical', cost: 320}])
+    elitePicinieres: {label: 'elitePicinieres', name: 'Elite Picinieres', img: 'elitePicinieres', range: 2, damage: 36, type: 'physical'}})
+    
+    const [startingTowersList, setStartingTowersList] = useState(["archers", 'peasants', 'mage'])
+    const [startingTowers, setStartingTowers] = useState([])
+
+    const [ranges, setRanges] = useState([])
 
     useEffect(()=>{
         const calculateDirection = (a,b) => {
@@ -73,7 +73,60 @@ const GameDataLoader = () => {
         setMap({...map, map: generatedMap})
     },[])
 
-    return <Game map={map} path={path} animationTable={animationTable} waves={waves} allTowers={allTowers} startingTowers={startingTowers} pathBackgrounds={pathBackgrounds}/>
+    useEffect(()=>{
+        const result = []
+        for (const [key, value] of Object.entries(allTowers)) {
+            if(startingTowersList.includes(key)) {
+                result.push(value)
+            }
+        }
+        setStartingTowers(result)
+    }, [allTowers, startingTowersList])
+
+    const getRange = (index, range, width) => {
+        const result = [index]
+        if(range > 0) {
+            if(index%width-1 >= 0) { result.push(index-1) }
+            if(index%width+1 < width) { result.push(index+1) }
+            result.push(index-width, index+width)
+        }
+        if(range > 1) {
+            if(index%width-1 >= 0) { result.push(index-width-1, index+width-1) }
+            if(index%width+1 < width) { result.push(index-width+1, index+width+1) }
+            
+        }
+        if(range > 2) {
+            if(index%width-2 >= 0) { result.push(index-2) }
+            if(index%width+2 < width) { result.push(index+2) }
+            result.push(index-(2*width), index+(2*width))
+        }
+        if(range > 3) {
+            if(index%width-1 >= 0) { result.push(index-(2*width)-1, index+(2*width)-1) }
+            if(index%width+1 < width) { result.push(index-(2*width)+1, index+(2*width)+1) }
+            if(index%width-2 >= 0) { result.push(index-width-2, index+width-2) }
+            if(index%width+2 < width) { result.push(index-width+2, index+width+2) }
+        }
+        if(range > 4) {
+            if(index%width-2 >= 0) { result.push(index-(2*width)-2, index+(2*width)-2) }
+            if(index%width+2 < width) { result.push(index-(2*width)+2, index+(2*width)+2) }
+        }
+        if(range > 5) {
+            if(index%width-1 >= 0) { result.push(index-(3*width)-1, index+(3*width)-1) }
+            if(index%width+1 < width) { result.push(index-(3*width)+1, index+(3*width)+1) }
+            if(index%width-3 >= 0) { result.push(index-width-3, index-3, index+width-3) }
+            if(index%width+3 < width) { result.push(index-width+3, index+3, index+width+3) }
+            result.push(index-(3*width), index+(3*width)) 
+        }
+        if(range > 6) {
+            if(index%width-2 >= 0) { result.push(index-(3*width)-2, index+(3*width)-2) }
+            if(index%width+2 < width) { result.push(index-(3*width)+2, index+(3*width)+2) }
+            if(index%width-3 >= 0) { result.push(index-(3*width)-3, index-(2*width)-3, index+(2*width)-3, index+(3*width)-3) }
+            if(index%width+3 < width) { result.push(index-(3*width)+3, index-(2*width)+3, index+(2*width)+3, index+(3*width)+3) }
+        }
+        return result.filter(e=>{ return e >= 0 ? true : false})
+    }
+
+    return <Game map={map} path={path} animationTable={animationTable} waves={waves} allTowers={allTowers} startingTowers={startingTowers} pathBackgrounds={pathBackgrounds} getRange={getRange}/>
 }
 
 export default GameDataLoader
