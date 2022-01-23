@@ -24,9 +24,13 @@ const Map = (props) => {
     const tile = (index) => {
         
         if(props.path.includes(index)) {
-            if(props.enemies.map(e=>e.positionIndex).includes(index)) {
+            const enemiesOnTile = []
+            for (const [key, value] of Object.entries(props.enemies)) {
+                if(value.positionIndex === index) { enemiesOnTile.push(props.enemies[key]) }
+            }
+            if(enemiesOnTile.length > 0) {
                 return <div className={`${props.pathBackgrounds[index]} path`} style={{height: `${size}px`, width: `${size}px`}} key={index}>
-                {props.enemies.filter(e=> {return e.positionIndex === index ? true : false}).map(e=>
+                {enemiesOnTile.map(e=>
                 <div key={uuidv4().substring(0,8)}>
                     <Enemy enemy={e} path={props.path} mapWidth={width} animationTable={props.animationTable} tickSpeed={props.tickSpeed}/>
                 </div>

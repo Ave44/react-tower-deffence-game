@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid'
 import Map from "./Map"
 
 const Game = (props) => {
-    const tickSpeed = 2000
+    const tickSpeed = 500
     const map = props.map
     const path = props.path
     const waves = props.waves
@@ -13,7 +13,7 @@ const Game = (props) => {
     const newTowers = []
     const towersToSell = []
 
-    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: [], towers: {}})
+    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
 
     const loseLives = () => {
         if(livesLostThisRound.length > 0) {
@@ -34,13 +34,21 @@ const Game = (props) => {
     }
 
     const handleTickEnemies = () => {
-        const enemiesAfterMove = gameData.enemies.map(e => moveEnemy(e)).filter(e => e)
+        const enemiesAfterMove = {}
+        for (const [key, value] of Object.entries(gameData.enemies)) {
+            if(value.hp > 0) {
+                const enemyAfterMove = moveEnemy(value)
+                if(enemyAfterMove) { enemiesAfterMove[key] = enemyAfterMove }
+            }
+        }
 
         const newEnemies = waves[gameData.currentWave][gameData.waveIndex]
         if(newEnemies !== 'end') {
-            const enemiesAfterSpawning = [...enemiesAfterMove, ...newEnemies.map(enemy => {
-                return {...enemy, position: 0, positionIndex: path[0], animationProgres: 0, offsetX: randomOffset(), offsetY: randomOffset(), id: uuid().substring(0,4)}})]
-            return enemiesAfterSpawning
+            const spawnedEnemies = {}
+            for(let i = 0; i < newEnemies.length; i++) {
+                spawnedEnemies[uuid().substring(0,4)] = {...newEnemies[i], position: 0, positionIndex: path[0], animationProgres: 0, offsetX: randomOffset(), offsetY: randomOffset()}
+            }
+            return {...enemiesAfterMove, ...spawnedEnemies}
         }
         else {
             return enemiesAfterMove
@@ -55,9 +63,9 @@ const Game = (props) => {
     }
 
     const createTower = (index, label) => {
-        const tower = allTowers[label];console.log(tower)
+        const tower = allTowers[label]
         const inRange = props.getRange(index, tower.range, map.width).filter(e=>path.includes(e))
-        return {[index]: {...tower, inRange} }
+        return {[index]: {...tower, inRange, initiative: 0} }
     }
 
     const handleTickTowers = () => {
@@ -70,17 +78,44 @@ const Game = (props) => {
             const newKeys = newTowers.reduce((pre,cur)=>{return {...pre, ...createTower(cur.index, cur.label)}}, {})
             return {...gameData.towers, ...newKeys}
         }
+        for (const [key, value] of Object.entries(gameData.towers)) {
+            if(value.initiative < value.speed) {
+                gameData.towers[key] = {...value, initiative: value.initiative + 1}
+            }
+        }
         return gameData.towers
     }
 
-    const handleAttacks = () => {
-        const enemiesOnPath = gameData.enemies.map(e=>{return {id: e.id, position: e.position, index: e.positionIndex}})
-        for (const [key, value] of Object.entries(gameData.towers)) {
-            console.log(value.inRange)
-            const enemiesInRange = enemiesOnPath.filter(e=>value.inRange.includes(e.index))
-            console.log(enemiesInRange[0])
+    const dealDamage = (enemyId, tower) =>{
+        const enemy = gameData.enemies[enemyId]
+        const damage = Math.floor(Math.random() * (tower.maxDamage - tower.minDamage + 1) + tower.minDamage)
+        if(tower.type === 'physical') {
+            gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - Math.floor(damage*(1-enemy.armor))}
         }
-        console.log(gameData.enemies, enemiesOnPath)
+        else if(tower.type === 'magical') {
+            gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - Math.floor(damage*(1-enemy.magicResistance))}
+        }
+        else {
+            gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - damage}
+        }
+    }
+
+    const handleAttacks = () => {
+        const enemiesOnPath = []
+        for (const [key, value] of Object.entries(gameData.enemies)) {
+            enemiesOnPath.push({id: key, position: value.position, index: value.positionIndex})
+        }
+        const sorted = enemiesOnPath.sort((a,b)=>{return a.position - b.position})
+        for (const [key, value] of Object.entries(gameData.towers)) {
+            if(value.initiative === value.speed) {
+                const enemiesInRange = sorted.filter(e=>value.inRange.includes(e.index))
+                if(enemiesInRange.length > 0) {
+                    const attackedEnemy = enemiesInRange[enemiesInRange.length - 1]
+                    dealDamage(attackedEnemy.id,gameData.towers[key])
+                    gameData.towers[key].initiative = 0
+                }
+            }
+        }
     }
 
     const tick = () => {

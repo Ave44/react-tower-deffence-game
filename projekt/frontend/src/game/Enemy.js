@@ -1,5 +1,6 @@
 const Enemy = (props) => {
     const enemy = props.enemy
+    // console.log(enemy)
     const tickSpeed = props.tickSpeed
     const animation = props.animationTable[Math.floor(enemy.position)]
 

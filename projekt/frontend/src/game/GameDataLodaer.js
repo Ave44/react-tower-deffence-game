@@ -8,17 +8,17 @@ const GameDataLoader = () => {
     //const [path, setPath] = useState([3,11,10,18,26,27,28,20,21,22,30,38,46,45,53,52,51,43,42,50,58,57,49,48,40,32,33,25,24])
     //const [path, setPath] = useState([8,9,10,11,3])
     const [animationTable, setAnimationTable] = useState([])
-    const [goblin] = useState({hp: 8, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin'}) // speed = [0.1, 0.2, 0.25, 0.5, 1] ewantualnie 1/3
+    const [goblin] = useState({hp: 10, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin', armor: 0, magicResistance: 0}) // speed = [0.1, 0.2, 0.25, 0.5, 1] ewantualnie 1/3
     const [waves, setWaves] = useState([[[goblin],[],[goblin],[goblin],[],[goblin,goblin],[goblin],[],[],[goblin,goblin,goblin], [goblin], 'end']])
-    const [allTowers, setAllTowers] = useState({archers: {label: "archers", name: "Archers", img: "archers", range: 2, damage: 2, type: 'phisical', cost: 80,
+    const [allTowers, setAllTowers] = useState({archers: {label: "archers", name: "Archers", img: "archers", range: 2, minDamage: 1, maxDamage: 4, type: 'physical', cost: 80, speed: 2,
         upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},
-    forestArchers: {label: 'forestArchers', name: 'Forest Archers', img: 'forestArchers', range: 4, damage: 3, type: 'phisical'},
-    armyArchers: {label: 'armyArchers', name: 'Army Archers', img: 'armyArchers', range: 3, damage: 8, type: 'phisical', upgrades: [{label: 'eliteArchers', name: 'Elite Archers', cost: 200}]},
-    eliteArchers: {label: 'eliteArchers', name: 'Elite Archers', img: 'eliteArchers', range: 5, damage: 16, type: 'physical'},
-    mage: {label: 'mage', name: 'Mage', img: 'mage', range: 2, damage: 6, type: 'magical', cost: 120},
-    peasants: {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, damage: 8, type: 'physical', cost: 60, upgrades: [{label: 'picinieres', name: 'Picinieres', cost: 100}]},
-    picinieres: {label: 'picinieres', name: 'Picinieres', img: 'picinieres', range: 1, damage: 18, type: 'physical', cost: 120, upgrades: [{label: 'elitePicinieres', name: 'Elite Picinieres', cost: 250}]},
-    elitePicinieres: {label: 'elitePicinieres', name: 'Elite Picinieres', img: 'elitePicinieres', range: 2, damage: 36, type: 'physical'}})
+    forestArchers: {label: 'forestArchers', name: 'Forest Archers', img: 'forestArchers', range: 4, minDamage: 3, maxDamage: 5, type: 'physical', speed: 1},
+    armyArchers: {label: 'armyArchers', name: 'Army Archers', img: 'armyArchers', range: 3, minDamage: 8, maxDamage: 12, type: 'physical', speed: 2, upgrades: [{label: 'eliteArchers', name: 'Elite Archers', cost: 200}]},
+    eliteArchers: {label: 'eliteArchers', name: 'Elite Archers', img: 'eliteArchers', range: 5, minDamage: 16, maxDamage: 22, type: 'physical', speed: 1},
+    mage: {label: 'mage', name: 'Mage', img: 'mage', range: 2, minDamage: 1, maxDamage: 22, type: 'magical', cost: 120, speed: 4},
+    peasants: {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, minDamage: 3, maxDamage: 6, type: 'physical', cost: 60, speed: 2, upgrades: [{label: 'picinieres', name: 'Picinieres', cost: 100}]},
+    picinieres: {label: 'picinieres', name: 'Picinieres', img: 'picinieres', range: 1, minDamage: 8, maxDamage: 16, type: 'physical', cost: 120, speed: 2, upgrades: [{label: 'elitePicinieres', name: 'Elite Picinieres', cost: 250}]},
+    elitePicinieres: {label: 'elitePicinieres', name: 'Elite Picinieres', img: 'elitePicinieres', range: 2, minDamage: 30, maxDamage: 36, speed: 1, type: 'physical'}})
     
     const [startingTowersList, setStartingTowersList] = useState(["archers", 'peasants', 'mage'])
     const [startingTowers, setStartingTowers] = useState([])
