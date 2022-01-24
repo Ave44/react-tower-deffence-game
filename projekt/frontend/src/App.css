@@ -19,6 +19,10 @@ body {
   font-size: 15px;
   color: black;
   font-family: 'Press Start 2P', cursive;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 body .statistics {
@@ -28,13 +32,21 @@ body .statistics {
       grid-template-columns: 25% 25% 25% 25%;
   background-image: url("./game//images/upgradeBackground.png");
   background-size: contain;
-  padding-bottom: 10px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 15px;
+  padding: 15px;
 }
 
-body .statistics .image {
+body .statistics .statistic {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+body .statistics .statistic .margins {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+body .statistics .statistic .image {
   height: 15px;
   position: relative;
   top: -2px;
@@ -101,6 +113,16 @@ body .map .tile .tower .upgrades .upgrade:hover {
   -webkit-filter: brightness(120%);
           filter: brightness(120%);
   border: black dashed 2px;
+}
+
+body .map .tile .tower .upgrades .gray {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
+body .map .tile .tower .upgrades .gray:hover {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
 }
 
 body .map .tile .tower .sellWraper {
@@ -176,6 +198,16 @@ body .map .tile .options .option:hover {
   -webkit-filter: brightness(120%);
           filter: brightness(120%);
   border: black dashed 2px;
+}
+
+body .map .tile .options .gray {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
+}
+
+body .map .tile .options .gray:hover {
+  -webkit-filter: grayscale(100%);
+          filter: grayscale(100%);
 }
 
 body .map .tile .options:hover {

@@ -11,18 +11,25 @@ const Game = (props) => {
     const waves = props.level.waves
     const startingTowers = props.level.startingTowers
     const allTowers = props.allTowers
-    const startingGold = props.startingGold
     const livesLostThisRound = []
     const newTowers = []
     const towersToSell = []
+    const goldDifrence = []
 
-    const [gameData, setGameData] = useState({hp: 20, gold: 100, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
-    // const gameData = props.gameData
-    // const setGameData = props.setGameData
+    const [gameData, setGameData] = useState({hp: 20, gold: 0, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
+    const [gameStatus, setGameStatus] = useState({nextWave: true, lost: false, victory: false})
+
+    useEffect(()=>{
+        setGameData({hp: 20, gold: props.level.gold, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
+    },[props.level])
 
     const loseLives = () => {
         if(livesLostThisRound.length > 0) {
-            return gameData.hp - livesLostThisRound.reduce((pre,cur) => {return pre + cur}, 0)
+            const lives = gameData.hp - livesLostThisRound.reduce((pre,cur) => {return pre + cur}, 0)
+            if(lives <= 0) {
+                setGameStatus({...gameStatus, lost: true})
+            }
+            return lives
         }
         return gameData.hp
     }   
@@ -63,9 +70,22 @@ const Game = (props) => {
         }
     }
 
+    const nextWave = () => {
+        gameStatus.nextWave = false
+        gameData.currentWave = gameData.currentWave + 1
+        gameData.waveIndex = 0
+    }
+
     const handleTickWave = () => {
-        if(waves[gameData.currentWave][gameData.waveIndex + 1] !== 'end') {
+        if(waves[gameData.currentWave][gameData.waveIndex + 1]) {
             return gameData.waveIndex + 1
+        }
+        if(props.level.waves.length - 1 !== gameData.currentWave) {
+            gameStatus.nextWave = true
+            return gameData.waveIndex
+        }
+        if(gameData.hp > 0 && Object.keys(gameData.enemies).length === 0) {
+            gameStatus.victory = true
         }
         return gameData.waveIndex
     }
@@ -131,10 +151,18 @@ const Game = (props) => {
         }
     }
 
+    const handleGold = () => {
+        if(goldDifrence.length > 0) {
+            const difrence = goldDifrence.reduce((pre,cur)=>{return pre + cur}, 0)
+            return gameData.gold - difrence
+        }
+        return gameData.gold
+    }
+
     const tick = () => {
         console.log('----------tick----------')
         handleAttacks()
-        setGameData({...gameData, towers: handleTickTowers(), waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives()})
+        setGameData({...gameData, towers: handleTickTowers(), waveIndex: handleTickWave(), enemies: handleTickEnemies(), hp: loseLives(), gold: handleGold()})
         // ^ Kolejność jest ważna!
     }
 
@@ -145,9 +173,12 @@ const Game = (props) => {
         return () => clearInterval(timer)
     })
 
+    if(gameStatus.lost) { return <div>Failure!</div> }
+    if(gameStatus.victory) { return <div>Victory!</div> }
+
     return (<div>
-        <Statistics hp={gameData.hp} gold={gameData.gold} wave={gameData.currentWave} nextWave={console.log()}/>
-        <Map map={map} width={width} enemies={gameData.enemies} path={path}
+        <Statistics hp={gameData.hp} gold={gameData.gold} wave={gameData.currentWave} next={gameStatus.nextWave} nextWave={nextWave}/>
+        <Map map={map} width={width} enemies={gameData.enemies} path={path} gold={gameData.gold} goldDifrence={goldDifrence}
         pathBackgrounds={props.level.pathBackgrounds} animationTable={props.level.animationTable} tickSpeed={tickSpeed}
         newTowers={newTowers} towersToSell={towersToSell} towers={gameData.towers} startingTowers={startingTowers}/>
     </div>)

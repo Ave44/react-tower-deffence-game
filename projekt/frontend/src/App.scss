@@ -11,24 +11,30 @@ body {
     font-size: 15px;
     color: black;
     font-family: 'Press Start 2P', cursive;
+    user-select: none;
 
     .statistics {
-        // display: flex;
-        // justify-content: space-between;
         display: grid;
         grid-template-columns: 25% 25% 25% 25%;
         background-image: url('./game//images/upgradeBackground.png');
         background-size: contain;
-        padding-bottom: 10px;
-        padding-left: 20px;
-        padding-right: 20px;
-        padding-top: 15px;
+        padding: 15px;
         
-        .image {
-            height: 15px;
-            position: relative;
-            top: -2px;
+        .statistic {
+            display: flex;
+
+            .margins {
+                margin-left: 10px;
+                margin-right: 5px;
+            }
+
+            .image {
+                height: 15px;
+                position: relative;
+                top: -2px;
+            }
         }
+        
     }
 
     .map {
@@ -53,7 +59,6 @@ body {
                     position: absolute;
     
                     .upgrade {
-                        //color: black;
                         background-image: url('./game/images/upgradeBackground.png');
                         background-size: contain;
                         padding: 5px;
@@ -82,6 +87,9 @@ body {
                         filter: brightness(120%);
                         border: black dashed 2px;
                     }
+
+                    .gray { filter: grayscale(100%); }
+                    .gray:hover { filter: grayscale(100%); }
                 }
 
                 .sellWraper {
@@ -90,7 +98,6 @@ body {
                     z-index: 3;
 
                     .sell {
-                        //color: black;
                         border: black solid 2px;
                         background-image: url('./game/images/upgradeBackground.png');
                         background-size: contain;
@@ -125,7 +132,6 @@ body {
                 z-index: 2;
 
                 .option {
-                    //color: black;
                     background-image: url('./game/images/upgradeBackground.png');
                     background-size: contain;
                     padding: 5px;
@@ -154,6 +160,9 @@ body {
                     filter: brightness(120%);
                     border: black dashed 2px;
                 }
+
+                .gray { filter: grayscale(100%); }
+                .gray:hover { filter: grayscale(100%); }
             }
 
             .options:hover {

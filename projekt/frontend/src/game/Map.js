@@ -8,18 +8,33 @@ const Map = (props) => {
     const size = 800/width
     const map = props.map
     const towers = props.startingTowers
+    
 
-    const addTower = (index, label) => {
-        props.newTowers.push({index, label})
+    const addTower = (index, label, cost) => {
+        const difrence = props.goldDifrence.reduce((pre,cur)=>{return pre + cur}, 0)
+        const curGold = props.gold - difrence
+        if(curGold >= cost) {
+            props.newTowers.push({index, label})
+            props.goldDifrence.push(cost)
+        }
     }
 
     const showTowers = (index) => {
         return <div className='options' style={{minHeight: `${size}px`, width: `${size * 3}px`, top: `${-size/2}px`, left: `${-size}px`}}>
-            {towers.map(e=><div className='option' key={e.label} onClick={()=>{addTower(index, e.label)}}>
+            {towers.map(e=>{
+            if(props.gold >= e.cost) {
+                return <div className='option' key={e.label} onClick={()=>{addTower(index, e.label, e.cost)}}>
+                    <div>{e.name}</div>
+                    <div className='cost'>{e.cost}</div>
+                    <img src={coin} alt='$' className='coin'/>
+                </div>
+            }
+            return <div className='option gray' key={e.label} onClick={()=>{addTower(index, e.label, e.cost)}}>
                 <div>{e.name}</div>
                 <div className='cost'>{e.cost}</div>
                 <img src={coin} alt='$' className='coin'/>
-            </div>)}
+            </div>
+            })}
         </div>
     }
 
@@ -44,7 +59,7 @@ const Map = (props) => {
 
         if(props.towers.hasOwnProperty(index)) {
             return <div className='tile' style={{height: `${size}px`, width: `${size}px`}} key={index}>
-                <Tower tower={props.towers[index]} size={size} newTowers={props.newTowers} index={index} towersToSell={props.towersToSell}/>
+                <Tower tower={props.towers[index]} size={size} newTowers={props.newTowers} index={index} towersToSell={props.towersToSell} gold={props.gold} goldDifrence={props.goldDifrence}/>
             </div>
         }
 
