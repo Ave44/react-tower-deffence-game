@@ -1,19 +1,24 @@
 import { useState, useEffect } from "react"
 import { v4 as uuid } from 'uuid'
+import Statistics from './Statistics'
 import Map from "./Map"
 
 const Game = (props) => {
     const tickSpeed = 500
-    const map = props.map
-    const path = props.path
-    const waves = props.waves
-    const startingTowers = props.startingTowers
+    const map = props.level.map
+    const width = props.level.width
+    const path = props.level.path
+    const waves = props.level.waves
+    const startingTowers = props.level.startingTowers
     const allTowers = props.allTowers
+    const startingGold = props.startingGold
     const livesLostThisRound = []
     const newTowers = []
     const towersToSell = []
 
-    const [gameData, setGameData] = useState({hp: 20, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
+    const [gameData, setGameData] = useState({hp: 20, gold: 100, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
+    // const gameData = props.gameData
+    // const setGameData = props.setGameData
 
     const loseLives = () => {
         if(livesLostThisRound.length > 0) {
@@ -40,6 +45,9 @@ const Game = (props) => {
                 const enemyAfterMove = moveEnemy(value)
                 if(enemyAfterMove) { enemiesAfterMove[key] = enemyAfterMove }
             }
+            else {
+                gameData.gold = gameData.gold + value.gold
+            }
         }
 
         const newEnemies = waves[gameData.currentWave][gameData.waveIndex]
@@ -64,7 +72,7 @@ const Game = (props) => {
 
     const createTower = (index, label) => {
         const tower = allTowers[label]
-        const inRange = props.getRange(index, tower.range, map.width).filter(e=>path.includes(e))
+        const inRange = props.getRange(index, tower.range, width).filter(e=>path.includes(e))
         return {[index]: {...tower, inRange, initiative: 0} }
     }
 
@@ -100,15 +108,20 @@ const Game = (props) => {
         }
     }
 
-    const handleAttacks = () => {
+    const getEnemiesInRange = (tilesInRange) => {
         const enemiesOnPath = []
         for (const [key, value] of Object.entries(gameData.enemies)) {
-            enemiesOnPath.push({id: key, position: value.position, index: value.positionIndex})
+            enemiesOnPath.push({id: key, hp: value.hp, position: value.position, index: value.positionIndex})
         }
         const sorted = enemiesOnPath.sort((a,b)=>{return a.position - b.position})
+        const enemiesInRange = sorted.filter(e=>tilesInRange.includes(e.index))
+        return enemiesInRange.filter(e=>{return e.hp > 0})
+    }
+
+    const handleAttacks = () => {
         for (const [key, value] of Object.entries(gameData.towers)) {
+            const enemiesInRange = getEnemiesInRange(value.inRange)
             if(value.initiative === value.speed) {
-                const enemiesInRange = sorted.filter(e=>value.inRange.includes(e.index))
                 if(enemiesInRange.length > 0) {
                     const attackedEnemy = enemiesInRange[enemiesInRange.length - 1]
                     dealDamage(attackedEnemy.id,gameData.towers[key])
@@ -133,10 +146,9 @@ const Game = (props) => {
     })
 
     return (<div>
-        <div>Health: {gameData.hp}</div>
-        <div>Wave: {gameData.currentWave}</div>
-        <button onClick={()=>{setGameData({...gameData, currentWave: gameData.currentWave + 1})}}>next wave</button>
-        <Map map={map} enemies={gameData.enemies} path={path} pathBackgrounds={props.pathBackgrounds} animationTable={props.animationTable} tickSpeed={tickSpeed}
+        <Statistics hp={gameData.hp} gold={gameData.gold} wave={gameData.currentWave} nextWave={console.log()}/>
+        <Map map={map} width={width} enemies={gameData.enemies} path={path}
+        pathBackgrounds={props.level.pathBackgrounds} animationTable={props.level.animationTable} tickSpeed={tickSpeed}
         newTowers={newTowers} towersToSell={towersToSell} towers={gameData.towers} startingTowers={startingTowers}/>
     </div>)
 }

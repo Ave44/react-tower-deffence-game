@@ -1,3 +1,5 @@
+import coin from './images/coin.png';
+
 const Tower = (props) => {
     const tower = props.tower
     const size = props.size
@@ -13,7 +15,8 @@ const Tower = (props) => {
             return <div className="upgrades" style={{height: `${size}px`, width: `${size * 3}px`, top: `${-size}px`, left: `${-size}px`}}>
                 {tower.upgrades.map(e=> {return <div className="upgrade" key={e.name} onClick={()=>{upgrade(e.label)}}>
                     <div>{e.name}</div>
-                    <div>{'$'}{e.cost}</div>
+                    <div className='cost'>{e.cost}</div>
+                    <img src={coin} alt='$' className='coin'/>
                 </div>})}
             </div>
         }

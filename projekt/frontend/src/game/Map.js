@@ -1,11 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
-import Enemy from './Enemy'
+import Enemy from './Enemy';
 import Tower from './Tower';
+import coin from './images/coin.png';
 
 const Map = (props) => {
-    const width = props.map.width
+    const width = props.width
     const size = 800/width
-    const map = props.map.map
+    const map = props.map
     const towers = props.startingTowers
 
     const addTower = (index, label) => {
@@ -16,7 +17,8 @@ const Map = (props) => {
         return <div className='options' style={{minHeight: `${size}px`, width: `${size * 3}px`, top: `${-size/2}px`, left: `${-size}px`}}>
             {towers.map(e=><div className='option' key={e.label} onClick={()=>{addTower(index, e.label)}}>
                 <div>{e.name}</div>
-                <div>{'$'}{e.cost}</div>
+                <div className='cost'>{e.cost}</div>
+                <img src={coin} alt='$' className='coin'/>
             </div>)}
         </div>
     }

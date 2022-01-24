@@ -9,8 +9,27 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 15px;
-    color: white;
+    color: black;
     font-family: 'Press Start 2P', cursive;
+
+    .statistics {
+        // display: flex;
+        // justify-content: space-between;
+        display: grid;
+        grid-template-columns: 25% 25% 25% 25%;
+        background-image: url('./game//images/upgradeBackground.png');
+        background-size: contain;
+        padding-bottom: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+        padding-top: 15px;
+        
+        .image {
+            height: 15px;
+            position: relative;
+            top: -2px;
+        }
+    }
 
     .map {
         display: flex;
@@ -34,7 +53,7 @@ body {
                     position: absolute;
     
                     .upgrade {
-                        color: black;
+                        //color: black;
                         background-image: url('./game/images/upgradeBackground.png');
                         background-size: contain;
                         padding: 5px;
@@ -48,6 +67,15 @@ body {
                         display: flex;
                         justify-content: space-between;
                         max-width: 200px;
+
+                        .cost {
+                            margin-left: auto;
+                            margin-right: 5px;
+                        }
+    
+                        .coin {
+                            height: 10px;
+                        }
                     }
 
                     .upgrade:hover {
@@ -62,7 +90,7 @@ body {
                     z-index: 3;
 
                     .sell {
-                        color: black;
+                        //color: black;
                         border: black solid 2px;
                         background-image: url('./game/images/upgradeBackground.png');
                         background-size: contain;
@@ -97,7 +125,7 @@ body {
                 z-index: 2;
 
                 .option {
-                    color: black;
+                    //color: black;
                     background-image: url('./game/images/upgradeBackground.png');
                     background-size: contain;
                     padding: 5px;
@@ -111,6 +139,15 @@ body {
                     display: flex;
                     justify-content: space-between;
                     max-width: 200px;
+
+                    .cost {
+                        margin-left: auto;
+                        margin-right: 5px;
+                    }
+
+                    .coin {
+                        height: 10px;
+                    }
                 }
 
                 .option:hover {

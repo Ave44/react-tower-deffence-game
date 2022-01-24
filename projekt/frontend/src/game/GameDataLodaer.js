@@ -2,35 +2,62 @@ import { useState, useEffect } from "react"
 import Game from "./Game"
 
 const GameDataLoader = () => {
-    const [map, setMap] = useState({width: 8, height: 8, map: []})
-    const [path, setPath] = useState([1,9,17,25,33,34,42,50,51,52,53,45,37,29,30,31])
-    const [pathBackgrounds, setPathBackgrounds] = useState({})
-    //const [path, setPath] = useState([3,11,10,18,26,27,28,20,21,22,30,38,46,45,53,52,51,43,42,50,58,57,49,48,40,32,33,25,24])
-    //const [path, setPath] = useState([8,9,10,11,3])
-    const [animationTable, setAnimationTable] = useState([])
-    const [goblin] = useState({hp: 10, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin', armor: 0, magicResistance: 0}) // speed = [0.1, 0.2, 0.25, 0.5, 1] ewantualnie 1/3
-    const [waves, setWaves] = useState([[[goblin],[],[goblin],[goblin],[],[goblin,goblin],[goblin],[],[],[goblin,goblin,goblin], [goblin], 'end']])
-    const [allTowers, setAllTowers] = useState({archers: {label: "archers", name: "Archers", img: "archers", range: 2, minDamage: 1, maxDamage: 4, type: 'physical', cost: 80, speed: 2,
-        upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},
-    forestArchers: {label: 'forestArchers', name: 'Forest Archers', img: 'forestArchers', range: 4, minDamage: 3, maxDamage: 5, type: 'physical', speed: 1},
-    armyArchers: {label: 'armyArchers', name: 'Army Archers', img: 'armyArchers', range: 3, minDamage: 8, maxDamage: 12, type: 'physical', speed: 2, upgrades: [{label: 'eliteArchers', name: 'Elite Archers', cost: 200}]},
-    eliteArchers: {label: 'eliteArchers', name: 'Elite Archers', img: 'eliteArchers', range: 5, minDamage: 16, maxDamage: 22, type: 'physical', speed: 1},
-    mage: {label: 'mage', name: 'Mage', img: 'mage', range: 2, minDamage: 1, maxDamage: 22, type: 'magical', cost: 120, speed: 4},
-    peasants: {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, minDamage: 3, maxDamage: 6, type: 'physical', cost: 60, speed: 2, upgrades: [{label: 'picinieres', name: 'Picinieres', cost: 100}]},
-    picinieres: {label: 'picinieres', name: 'Picinieres', img: 'picinieres', range: 1, minDamage: 8, maxDamage: 16, type: 'physical', cost: 120, speed: 2, upgrades: [{label: 'elitePicinieres', name: 'Elite Picinieres', cost: 250}]},
-    elitePicinieres: {label: 'elitePicinieres', name: 'Elite Picinieres', img: 'elitePicinieres', range: 2, minDamage: 30, maxDamage: 36, speed: 1, type: 'physical'}})
-    
-    const [startingTowersList, setStartingTowersList] = useState(["archers", 'peasants', 'mage'])
-    const [startingTowers, setStartingTowers] = useState([])
 
-    const [ranges, setRanges] = useState([])
+    const [allTowers, setAllTowers] = useState({})
+    const [allEnemies, setAllEnemies] = useState({})
+    const [level, setLevel] = useState({})
+    const [levelData, setLevelData] = useState({width: 0, height: 0, map: [], path: [], pathBackgrounds: {}, animationTable: [], waves: [], startingTowers: []})
 
-    useEffect(()=>{
+    // const [path, setPath] = useState([1,9,17,25,33,34,42,50,51,52,53,45,37,29,30,31])
+    // const [path, setPath] = useState([3,11,10,18,26,27,28,20,21,22,30,38,46,45,53,52,51,43,42,50,58,57,49,48,40,32,33,25,24])
+    // const [path, setPath] = useState([8,9,10,11,3])
+
+    useEffect(()=> {
+        setAllTowers({archers: {label: "archers", name: "Archers", img: "archers", range: 2, minDamage: 1, maxDamage: 4, type: 'physical', cost: 80, speed: 2,
+            upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},
+            forestArchers: {label: 'forestArchers', name: 'Forest Archers', img: 'forestArchers', range: 4, minDamage: 3, maxDamage: 5, type: 'physical', speed: 1},
+            armyArchers: {label: 'armyArchers', name: 'Army Archers', img: 'armyArchers', range: 3, minDamage: 10, maxDamage: 12, type: 'physical', speed: 2, upgrades: [{label: 'eliteArchers', name: 'Elite Archers', cost: 200}]},
+            eliteArchers: {label: 'eliteArchers', name: 'Elite Archers', img: 'eliteArchers', range: 5, minDamage: 16, maxDamage: 22, type: 'physical', speed: 1},
+            mage: {label: 'mage', name: 'Mage', img: 'mage', range: 2, minDamage: 1, maxDamage: 22, type: 'magical', cost: 120, speed: 4},
+            peasants: {label: 'peasants', name: 'Peasants', img: 'peasants', range: 1, minDamage: 3, maxDamage: 6, type: 'physical', cost: 60, speed: 2, upgrades: [{label: 'picinieres', name: 'Picinieres', cost: 100}]},
+            picinieres: {label: 'picinieres', name: 'Picinieres', img: 'picinieres', range: 1, minDamage: 8, maxDamage: 16, type: 'physical', cost: 120, speed: 2, upgrades: [{label: 'elitePicinieres', name: 'Elite Picinieres', cost: 250}]},
+            elitePicinieres: {label: 'elitePicinieres', name: 'Elite Picinieres', img: 'elitePicinieres', range: 2, minDamage: 30, maxDamage: 36, speed: 1, type: 'physical'}})
+
+        setAllEnemies({goblin: {hp: 10, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin', armor: 0, magicResistance: 0, gold: 5}}) // speed = [0.1, 0.2, 0.25, 0.5, 1] ewantualnie 1/3
+
+        const goblin = {hp: 10, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin', armor: 0, magicResistance: 0, gold: 5}
+        const waves = [[[goblin],[],[goblin],[goblin],[],[goblin,goblin],[goblin],[],[],[goblin,goblin,goblin], [goblin], 'end']]
+        const path = [1,9,17,25,33,34,42,50,51,52,53,45,37,29,30,31]
+        const startingTowers = ["archers", 'peasants', 'mage']
+        setLevel({width: 8, height: 8, path: path, startingTowers, waves: waves, gold: 120})
+    },[])
+
+    useEffect(()=> {
+        if(Object.keys(level).length !== 0) {
+            const generatedMap = []
+            for(let i = 0; i < level.width * level.height; i++) {
+                generatedMap.push(i)
+            }
+
+            const startingTowers = []
+            for (const [key, value] of Object.entries(allTowers)) {
+                if(level.startingTowers.includes(key)) {
+                    startingTowers.push(value)
+                }
+            }
+
+            const animationsAndBackgrounds = getAnimationsAndBackgrounds(level.width, level.path)
+            
+            setLevelData({...level, map: generatedMap, startingTowers, ...animationsAndBackgrounds})
+        }
+    }, [level, allTowers])  
+
+    const getAnimationsAndBackgrounds = (width, path) => {
         const calculateDirection = (a,b) => {
             if(a + 1 === b) {return 'Right'}
             if(a - 1 === b) {return 'Left'}
-            if(a + map.width === b) {return 'Down'}
-            if(a - map.width === b) {return 'Up'}
+            if(a + width === b) {return 'Down'}
+            if(a - width === b) {return 'Up'}
             return 'end'
         }
 
@@ -40,16 +67,14 @@ const GameDataLoader = () => {
             else { directionsTable.push(directionsTable.slice(-1)[0]) }
         }
 
-        const finishedTable = []
+        const animationTable = []
         for(let i = 0; i < directionsTable.length; i++) {
             if(directionsTable[i-1]) {
-                if(directionsTable[i] === directionsTable[i-1]) { finishedTable.push('move' + directionsTable[i]) }
-                else { finishedTable.push('move' + directionsTable[i-1] + directionsTable[i]) }
+                if(directionsTable[i] === directionsTable[i-1]) { animationTable.push('move' + directionsTable[i]) }
+                else { animationTable.push('move' + directionsTable[i-1] + directionsTable[i]) }
             }
-            else { finishedTable.push('move' + directionsTable[i]) }
-        }
-        
-        setAnimationTable(finishedTable)
+            else { animationTable.push('move' + directionsTable[i]) }
+        }  
         
         const getDirection = (a) => {
             if(a === 'moveDown' || a === 'moveUp') { return "Horizontal" }
@@ -61,27 +86,9 @@ const GameDataLoader = () => {
             return null
         }
 
-        const backgroundsTable = finishedTable.reduce((pre,cur, index)=>{ return {...pre, [path[index]]: getDirection(cur)} }, {})
-        setPathBackgrounds(backgroundsTable)
-    },[path, map])
-
-    useEffect(()=>{
-        const generatedMap = []
-        for(let i = 0; i < map.width * map.height; i++) {
-            generatedMap.push(i)
-        }
-        setMap({...map, map: generatedMap})
-    },[])
-
-    useEffect(()=>{
-        const result = []
-        for (const [key, value] of Object.entries(allTowers)) {
-            if(startingTowersList.includes(key)) {
-                result.push(value)
-            }
-        }
-        setStartingTowers(result)
-    }, [allTowers, startingTowersList])
+        const pathBackgrounds = animationTable.reduce((pre,cur, index)=>{ return {...pre, [path[index]]: getDirection(cur)} }, {})
+        return {animationTable, pathBackgrounds}
+    }
 
     const getRange = (index, range, width) => {
         const result = [index]
@@ -126,7 +133,9 @@ const GameDataLoader = () => {
         return result.filter(e=>{ return e >= 0 ? true : false})
     }
 
-    return <Game map={map} path={path} animationTable={animationTable} waves={waves} allTowers={allTowers} startingTowers={startingTowers} pathBackgrounds={pathBackgrounds} getRange={getRange}/>
+    //const [gameData, setGameData] = useState({hp: 20, gold: 100, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
+
+    return <Game level={levelData} allTowers={allTowers} getRange={getRange} />//gameData={gameData} setGameData={setGameData}/>
 }
 
 export default GameDataLoader

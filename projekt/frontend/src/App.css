@@ -17,8 +17,27 @@ body {
       -ms-flex-pack: center;
           justify-content: center;
   font-size: 15px;
-  color: white;
+  color: black;
   font-family: 'Press Start 2P', cursive;
+}
+
+body .statistics {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 25% 25% 25% 25%;
+      grid-template-columns: 25% 25% 25% 25%;
+  background-image: url("./game//images/upgradeBackground.png");
+  background-size: contain;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 15px;
+}
+
+body .statistics .image {
+  height: 15px;
+  position: relative;
+  top: -2px;
 }
 
 body .map {
@@ -50,7 +69,6 @@ body .map .tile .tower .upgrades {
 }
 
 body .map .tile .tower .upgrades .upgrade {
-  color: black;
   background-image: url("./game/images/upgradeBackground.png");
   background-size: contain;
   padding: 5px;
@@ -70,6 +88,15 @@ body .map .tile .tower .upgrades .upgrade {
   max-width: 200px;
 }
 
+body .map .tile .tower .upgrades .upgrade .cost {
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+body .map .tile .tower .upgrades .upgrade .coin {
+  height: 10px;
+}
+
 body .map .tile .tower .upgrades .upgrade:hover {
   -webkit-filter: brightness(120%);
           filter: brightness(120%);
@@ -83,7 +110,6 @@ body .map .tile .tower .sellWraper {
 }
 
 body .map .tile .tower .sellWraper .sell {
-  color: black;
   border: black solid 2px;
   background-image: url("./game/images/upgradeBackground.png");
   background-size: contain;
@@ -118,7 +144,6 @@ body .map .tile .options {
 }
 
 body .map .tile .options .option {
-  color: black;
   background-image: url("./game/images/upgradeBackground.png");
   background-size: contain;
   padding: 5px;
@@ -136,6 +161,15 @@ body .map .tile .options .option {
       -ms-flex-pack: justify;
           justify-content: space-between;
   max-width: 200px;
+}
+
+body .map .tile .options .option .cost {
+  margin-left: auto;
+  margin-right: 5px;
+}
+
+body .map .tile .options .option .coin {
+  height: 10px;
 }
 
 body .map .tile .options .option:hover {
