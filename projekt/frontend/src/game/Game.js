@@ -116,7 +116,7 @@ const Game = (props) => {
 
     const dealDamage = (enemyId, tower) =>{
         const enemy = gameData.enemies[enemyId]
-        const damage = Math.floor(Math.random() * (tower.maxDamage - tower.minDamage + 1) + tower.minDamage)
+        const damage = Math.floor(Math.random() * (tower.maxdamage - tower.mindamage + 1) + tower.mindamage)
         if(tower.type === 'physical') {
             gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - Math.floor(damage*(1-enemy.armor))}
         }

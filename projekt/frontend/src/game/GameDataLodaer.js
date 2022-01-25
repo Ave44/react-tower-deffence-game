@@ -8,10 +8,6 @@ const GameDataLoader = () => {
     const [level, setLevel] = useState({})
     const [levelData, setLevelData] = useState({width: 0, height: 0, map: [], path: [], pathBackgrounds: {}, animationTable: [], waves: [], startingTowers: [], gold: 10})
 
-    // const [path, setPath] = useState([1,9,17,25,33,34,42,50,51,52,53,45,37,29,30,31])
-    // const [path, setPath] = useState([3,11,10,18,26,27,28,20,21,22,30,38,46,45,53,52,51,43,42,50,58,57,49,48,40,32,33,25,24])
-    // const [path, setPath] = useState([8,9,10,11,3])
-
     useEffect(()=> {
         setAllTowers({archers: {label: "archers", name: "Archers", img: "archers", range: 2, minDamage: 1, maxDamage: 4, type: 'physical', cost: 80, speed: 2,
             upgrades: [{label: 'forestArchers', name: 'Forest Archers', cost: 100}, {label: 'armyArchers', name: 'Army Archers', cost: 150}, {label: 'crosbow', name: 'Crosbow', cost: 120}]},

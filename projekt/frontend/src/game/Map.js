@@ -9,7 +9,6 @@ const Map = (props) => {
     const map = props.map
     const towers = props.startingTowers
     
-
     const addTower = (index, label, cost) => {
         const difrence = props.goldDifrence.reduce((pre,cur)=>{return pre + cur}, 0)
         const curGold = props.gold - difrence
