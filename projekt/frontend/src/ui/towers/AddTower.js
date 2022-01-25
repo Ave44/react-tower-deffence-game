@@ -9,14 +9,14 @@ const AddTower = (props) => {
     const [speed, setSpeed] = useState(1)
 
     const createTower = () => {
-        const label = document.getElementById('label').value
-        const name = document.getElementById('name').value
-        const img = document.getElementById('img').value
+        const label = document.getElementById('label').value.trim()
+        const name = document.getElementById('name').value.trim()
+        const img = document.getElementById('img').value.trim()
         const type = document.querySelector('input[name="type"]:checked').value;
-        const mindamage = document.getElementById('mindamage').value
-        const maxdamage = document.getElementById('maxdamage').value
-        const cost = document.getElementById('cost').value
-        if(label && img && name && mindamage >= 0 && maxdamage >= 0 && mindamage <= maxdamage) {
+        const mindamage = parseInt(document.getElementById('mindamage').value)
+        const maxdamage = parseInt(document.getElementById('maxdamage').value)
+        const cost = parseInt(document.getElementById('cost').value)
+        if(label && img && name && mindamage >= 0 && maxdamage >= 0 && mindamage <= maxdamage && cost >= 0) {
             const tower = {label, name, img, type, mindamage, maxdamage, speed, range, cost}
 
             axios.post('http://localhost:5000/towers', tower)

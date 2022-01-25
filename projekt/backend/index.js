@@ -73,6 +73,7 @@ client
     })
     .catch(err => console.error('Connection error', err.stack));
 
+///////////////////////////////// Towers
 
 app.get('/towers', async (req, res) => {
     try {
@@ -108,16 +109,16 @@ app.post('/towers/edit/:id', async (req, res) => {
         const id = parseInt(req.params.id);
         const tower  = req.body
         if(tower.label && tower.img && tower.name && tower.type) {
-            const duplicate = await client.query(`SELECT * FROM towers WHERE label = '${tower.label}'`);
+            const duplicate = await client.query(`SELECT * FROM towers WHERE label = '${tower.label}'`); 
             if (duplicate.rows.length > 1 ) {
                 return res.status(500).send("LABEL_DUPLICATE");
             }
-            if (duplicate.rows.length === 1 && duplicate.rows[0].id != id) {
+            if (duplicate.rows.length === 1 && duplicate.rows[0].id !== id) {
                 return res.status(500).send("LABEL_DUPLICATE");
             }
             const editedRow = await client.query(`UPDATE towers SET
-            name = '${tower.name}', img = '${tower.img}', type = '${tower.type}', minDamage = '${tower.minDamage}', 
-            maxDamage = '${tower.maxDamage}', speed = '${tower.speed}', range = '${tower.range}', cost = '${tower.cost}'
+            label = '${tower.label}', name = '${tower.name}', img = '${tower.img}', type = '${tower.type}', minDamage = '${tower.mindamage}', 
+            maxDamage = '${tower.maxdamage}', speed = '${tower.speed}', range = '${tower.range}', cost = '${tower.cost}'
             WHERE id = '${id}' RETURNING *`);
             return res.send(editedRow.rows[0]);
         }
@@ -128,13 +129,69 @@ app.post('/towers/edit/:id', async (req, res) => {
     }
 });
 
-app.delete('/towers/:id', async (req, res) => {
+app.delete('/towers/:label', async (req, res) => {
+    try {
+        const label = req.params.label;
+
+        const deletedUpgrades1 = await client.query(`DELETE FROM upgrades WHERE label1='${label}' RETURNING *`);
+        const deletedUpgrades2 = await client.query(`DELETE FROM upgrades WHERE label2='${label}' RETURNING *`);
+        const deletedRow = await client.query(`DELETE FROM towers WHERE label='${label}' RETURNING *`);
+        return res.send({ tower: deletedRow.rows[0] })
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+///////////////////////////////// Upgrades
+
+app.get('/upgrades', async (req, res) => {
+    try {
+        const result = await client.query("SELECT * FROM upgrades");
+        return res.send(result.rows);
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.post('/upgrades', async (req, res) => {
+    try {
+        const upgrade  = req.body
+        if(upgrade.label1 && upgrade.label2 && upgrade.name && upgrade.cost) {
+            const insertedRow = await client.query(`INSERT INTO upgrades (label1, label2, name, cost)
+            VALUES ('${upgrade.label1}', '${upgrade.label2}', '${upgrade.name}', '${upgrade.cost}') RETURNING *`);
+            return res.send(insertedRow.rows[0]);
+        }
+        return res.status(500).send("MISSING_FIELDS");
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.post('/upgrades/edit/:id', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const upgrade  = req.body
+        if(upgrade.label1 && upgrade.label2 && upgrade.name && upgrade.cost) {
+            const editedRow = await client.query(`UPDATE upgrades SET
+            label1 = '${upgrade.label1}', label2 = '${upgrade.label2}', name = '${upgrade.name}', cost = '${upgrade.cost}', 
+            WHERE id = '${id}' RETURNING *`);
+            return res.send(editedRow.rows[0]);
+        }
+        return res.status(500).send("MISSING_FIELDS");
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.delete('/upgrades/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
 
-        // const deletedConnections = await client.query(`DELETE FROM towers WHERE songId=${id} RETURNING *`);
-        const deletedRow = await client.query(`DELETE FROM towers WHERE id=${id} RETURNING *`);
-        return res.send({tower: deletedRow.rows[0]   })//, connections: deletedConnections.rows});
+        const deletedRow = await client.query(`DELETE FROM upgrades WHERE id='${id}' RETURNING *`);
+        return res.send({ tower: deletedRow.rows[0] })
     }
     catch (err) {
         return res.status(500).send(err)
