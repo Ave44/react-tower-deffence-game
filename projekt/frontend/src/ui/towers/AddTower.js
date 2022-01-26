@@ -32,7 +32,6 @@ const AddTower = (props) => {
         else {
             alert('All fields must be proprely filled!')
         }
-        
     }
 
     const displayRange = () => {

@@ -113,6 +113,30 @@ body .content .header input {
   margin: 0;
 }
 
+body .content .upgrade {
+  background-image: url("./game//images/upgradeBackground.png");
+  background-size: contain;
+  border: black 5px solid;
+  padding: 20px;
+  width: 450px;
+  margin: auto;
+  margin-top: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+body .content .upgrade .text {
+  margin: auto;
+  line-height: 30px;
+}
+
 body .content .list {
   background-color: #4b4b4b;
   padding: 20px;
@@ -128,7 +152,7 @@ body .content .list {
 }
 
 body .content .list .item {
-  background-image: url("./game//images/upgradeBackground.png");
+  background-image: url("./game/images/upgradeBackground.png");
   background-size: contain;
   border: black 5px solid;
   display: -webkit-box;
@@ -147,6 +171,11 @@ body .content .list .item .image {
   width: 200px;
   margin-bottom: 10px;
   background-image: url("./game//images/tile.png");
+  background-size: contain;
+}
+
+body .content .list .item .path {
+  background-image: url("./game/images/pathHorizontal.png");
   background-size: contain;
 }
 
@@ -256,6 +285,11 @@ body .form .slider div {
   width: 30px;
   margin-top: 15px;
   margin-bottom: 15px;
+}
+
+body .form .slider .margin {
+  position: relative;
+  left: 180px;
 }
 
 body .form .slider .lower {

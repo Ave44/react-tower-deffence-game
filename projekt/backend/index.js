@@ -25,6 +25,7 @@ client
             CREATE TABLE IF NOT EXISTS enemies (
             id SERIAL PRIMARY KEY,
             label VARCHAR UNIQUE NOT NULL,
+            name VARCHAR NOT NULL,
             hp INT NOT NULL,
             maxHp INT NOT NULL,
             speed FLOAT NOT NULL,
@@ -172,10 +173,10 @@ app.post('/upgrades', async (req, res) => {
 app.post('/upgrades/edit/:id', async (req, res) => {
     try {
         const id = parseInt(req.params.id);
-        const upgrade  = req.body
+        const upgrade  = req.body;
         if(upgrade.label1 && upgrade.label2 && upgrade.name && upgrade.cost) {
             const editedRow = await client.query(`UPDATE upgrades SET
-            label1 = '${upgrade.label1}', label2 = '${upgrade.label2}', name = '${upgrade.name}', cost = '${upgrade.cost}', 
+            label1 = '${upgrade.label1}', label2 = '${upgrade.label2}', name = '${upgrade.name}', cost = '${upgrade.cost}'
             WHERE id = '${id}' RETURNING *`);
             return res.send(editedRow.rows[0]);
         }
@@ -191,7 +192,63 @@ app.delete('/upgrades/:id', async (req, res) => {
         const id = parseInt(req.params.id);
 
         const deletedRow = await client.query(`DELETE FROM upgrades WHERE id='${id}' RETURNING *`);
-        return res.send({ tower: deletedRow.rows[0] })
+        return res.send({ upgrade: deletedRow.rows[0] })
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+///////////////////////////////// Enemies
+
+app.get('/enemies', async (req, res) => {
+    try {
+        const result = await client.query("SELECT * FROM enemies");
+        return res.send(result.rows);
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.post('/enemies', async (req, res) => {
+    try {
+        const enemy  = req.body;
+        if(enemy.label && enemy.img && enemy.name) {
+            const insertedRow = await client.query(`INSERT INTO enemies (label, name, hp, maxHp, speed, loss, armor, magicResistance, gold, img)
+            VALUES ('${enemy.label}', '${enemy.name}', '${enemy.hp}', '${enemy.maxhp}', '${enemy.speed}', '${enemy.loss}', '${enemy.armor}', '${enemy.magicresistance}', '${enemy.gold}', '${enemy.img}') RETURNING *`);
+            return res.send(insertedRow.rows[0]);
+        }
+        return res.status(500).send("MISSING_FIELDS");
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.post('/enemies/edit/:id', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const enemy  = req.body;
+        if(enemy.label && enemy.img && enemy.name) {
+            const editedRow = await client.query(`UPDATE enemies SET
+            label = '${enemy.label}', name = '${enemy.name}', hp = '${enemy.hp}', maxHp = '${enemy.maxhp}', speed = '${enemy.speed}', loss = '${enemy.loss}',
+            armor = '${enemy.armor}', magicResistance = '${enemy.magicresistance}', gold = '${enemy.gold}', img = '${enemy.img}'
+            WHERE id = '${id}' RETURNING *`);
+            return res.send(editedRow.rows[0]);
+        }
+        return res.status(500).send("MISSING_FIELDS");
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.delete('/enemies/:label', async (req, res) => {
+    try {
+        const label = req.params.label;
+
+        const deletedRow = await client.query(`DELETE FROM enemies WHERE label='${label}' RETURNING *`);
+        return res.send({ enemy: deletedRow.rows[0] })
     }
     catch (err) {
         return res.status(500).send(err)

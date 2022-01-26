@@ -81,6 +81,24 @@ body {
 
             input { margin: 0; }
         }
+        
+        .upgrade {
+            background-image: url('./game//images/upgradeBackground.png');
+            background-size: contain;
+            border: black 5px solid;
+            padding: 20px;
+            width: 450px;
+            margin: auto;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .text {
+                margin: auto;
+                line-height: 30px;
+            }
+        }
 
         .list {
             background-color: #4b4b4b;
@@ -95,7 +113,7 @@ body {
             row-gap: 20px;
 
             .item {
-                background-image: url('./game//images/upgradeBackground.png');
+                background-image: url('./game/images/upgradeBackground.png');
                 background-size: contain;
                 border: black 5px solid;
                 display: flex;
@@ -108,6 +126,11 @@ body {
                     width: 200px;
                     margin-bottom: 10px;
                     background-image: url('./game//images/tile.png');
+                    background-size: contain;
+                }
+                
+                .path {
+                    background-image: url('./game/images/pathHorizontal.png');
                     background-size: contain;
                 }
                 
@@ -129,6 +152,8 @@ body {
             }
 
             .item:hover { border: black dashed 5px; }
+
+            
         }
     }
 
@@ -192,6 +217,11 @@ body {
                 width: 30px;
                 margin-top: 15px;
                 margin-bottom: 15px;
+            }
+
+            .margin {
+                position: relative;
+                left: 180px;
             }
 
             .lower {
