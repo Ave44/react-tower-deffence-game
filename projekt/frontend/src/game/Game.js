@@ -5,12 +5,12 @@ import Map from "./Map"
 
 const Game = (props) => {
     const tickSpeed = 500
-    const map = props.level.map
+    const map = props.map
     const width = props.level.width
     const path = props.level.path
     const waves = props.level.waves
     const startingTowers = props.level.startingTowers
-    const allTowers = props.allTowers
+    const towers = props.towers
     const livesLostThisRound = []
     const newTowers = []
     const towersToSell = []
@@ -91,7 +91,7 @@ const Game = (props) => {
     }
 
     const createTower = (index, label) => {
-        const tower = allTowers[label]
+        const tower = towers[label]
         const inRange = props.getRange(index, tower.range, width).filter(e=>path.includes(e))
         return {[index]: {...tower, inRange, initiative: 0} }
     }
@@ -121,7 +121,7 @@ const Game = (props) => {
             gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - Math.floor(damage*(1-enemy.armor))}
         }
         else if(tower.type === 'magical') {
-            gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - Math.floor(damage*(1-enemy.magicResistance))}
+            gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - Math.floor(damage*(1-enemy.magicresistance))}
         }
         else {
             gameData.enemies[enemyId] = {...gameData.enemies[enemyId], hp: enemy.hp - damage}

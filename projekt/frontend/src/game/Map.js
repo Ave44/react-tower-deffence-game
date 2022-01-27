@@ -66,8 +66,11 @@ const Map = (props) => {
             {showTowers(index)}
         </div>
     }
-
-    return <div className="map">{map.map(i => tile(i))}</div>
+console.log(towers)
+    if(towers) {
+        return <div className="map">{map.map(i => tile(i))}</div>
+    }
+    return <div></div>
 }
 
 export default Map

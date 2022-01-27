@@ -2,14 +2,14 @@ import axios from "axios"
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
-const AddTower = (props) => {
+const AddEnemy = (props) => {
     const history = useHistory()
 
     const [speed, setSpeed] = useState(1)
     const [armor, setArmor] = useState(0)
     const [magicResistance, setMagicResistance] = useState(0)
 
-    const createTower = () => {
+    const createEnemy = () => {
         const name = document.getElementById('name').value.trim()
         const label = document.getElementById('label').value.trim()
         const img = document.getElementById('img').value.trim()
@@ -76,8 +76,8 @@ const AddTower = (props) => {
 
     return <div>
         {form()}
-        <div className="button" onClick={()=>{createTower()}}>Add</div>
+        <div className="button" onClick={()=>{createEnemy()}}>Add</div>
     </div>
 }
 
-export default AddTower
+export default AddEnemy

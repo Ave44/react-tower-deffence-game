@@ -133,11 +133,13 @@ body {
                     background-image: url('./game/images/pathHorizontal.png');
                     background-size: contain;
                 }
-                
+
                 .title {
                     font-size: 17px;
                     margin-bottom: 10px;
                 }
+
+                .margin { margin-top: 20px;}
 
                 .withImage {
                     display: flex;
@@ -152,8 +154,6 @@ body {
             }
 
             .item:hover { border: black dashed 5px; }
-
-            
         }
     }
 
@@ -242,6 +242,39 @@ body {
                     border: black 1px solid;
                 }
             }
+        }
+        
+        .textarea {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: black 2px solid;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            line-height: 15px;
+            width: 450px;
+            height: 200px;
+        }
+
+        .map {
+            margin: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border: black 2px solid;
+        }
+
+        .mapField {
+            width: 25px;
+            height: 25px;
+            border: black 2px solid;
+            background-image: url('./game//images/tile.png');
+            background-size: contain;
+        }
+
+        .mapField:hover { filter: brightness(150%); }
+
+        .path {
+            background-image: none;
+            background-color: rgb(223, 129, 62);
         }
     }
 

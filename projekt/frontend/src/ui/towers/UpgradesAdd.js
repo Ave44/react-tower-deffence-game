@@ -14,12 +14,17 @@ const UpgradesAdd = (props) => {
         if(label2 && name && cost >= 0) {
             axios.post(`http://localhost:5000/upgrades`, upgrade)
             .then(res => {
-                props.setUpgrades({...props.upgrades, [label]: [...props.upgrades[label], {label: upgrade.label2, cost: upgrade.cost, name: upgrade.name, id: res.data.id}] })
+                if(props.upgrades[label]) {
+                    props.setUpgrades({...props.upgrades, [label]: [...props.upgrades[label], {label: upgrade.label2, cost: upgrade.cost, name: upgrade.name, id: res.data.id}] })
+                }
+                else {
+                    props.setUpgrades({...props.upgrades, [label]: [ {label: upgrade.label2, cost: upgrade.cost, name: upgrade.name, id: res.data.id} ] })
+                }
                 history.push(`/towers/upgrades/${label}`)
             })
             .catch(err => {
                 window.alert("Threre was a problem with adding the upgrade")
-                console.log(err.response.data)
+                console.log(err)
             })
         }
         else {

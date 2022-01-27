@@ -184,6 +184,10 @@ body .content .list .item .title {
   margin-bottom: 10px;
 }
 
+body .content .list .item .margin {
+  margin-top: 20px;
+}
+
 body .content .list .item .withImage {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -312,6 +316,42 @@ body .form .slider .rangeWraper .range {
   width: 40px;
   height: 40px;
   border: black 1px solid;
+}
+
+body .form .textarea {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: black 2px solid;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 10px;
+  line-height: 15px;
+  width: 450px;
+  height: 200px;
+}
+
+body .form .map {
+  margin: auto;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: black 2px solid;
+}
+
+body .form .mapField {
+  width: 25px;
+  height: 25px;
+  border: black 2px solid;
+  background-image: url("./game//images/tile.png");
+  background-size: contain;
+}
+
+body .form .mapField:hover {
+  -webkit-filter: brightness(150%);
+          filter: brightness(150%);
+}
+
+body .form .path {
+  background-image: none;
+  background-color: #df813e;
 }
 
 body .statistics {

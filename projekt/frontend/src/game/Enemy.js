@@ -30,8 +30,8 @@ const Enemy = (props) => {
     const offset = calculateOffset()
 
     const displayHp = () => {
-        if(enemy.hp !== enemy.maxHp) {
-            const percentageOfLostHp = enemy.hp/enemy.maxHp
+        if(enemy.hp !== enemy.maxhp) {
+            const percentageOfLostHp = enemy.hp/enemy.maxhp
             const hpWidth = parseInt(30 * percentageOfLostHp)
             const lostHpWidth = 30 - hpWidth
             return <div className="hpBar">

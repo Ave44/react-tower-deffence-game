@@ -56,14 +56,16 @@ client
             name VARCHAR NOT NULL,
             cost INT NOT NULL
             );
-            
+
             CREATE TABLE IF NOT EXISTS levels (
             id SERIAL PRIMARY KEY,
+            name VARCHAR NOT NULL,
             width INT NOT NULL,
             height INT NOT NULL,
             path VARCHAR NOT NULL,
             waves VARCHAR NOT NULL,
-            gold INT NOT NULL
+            gold INT NOT NULL,
+            startingtowers VARCHAR NOT NULL
             );`
         );
 
@@ -249,6 +251,57 @@ app.delete('/enemies/:label', async (req, res) => {
 
         const deletedRow = await client.query(`DELETE FROM enemies WHERE label='${label}' RETURNING *`);
         return res.send({ enemy: deletedRow.rows[0] })
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+///////////////////////////////// Levels
+
+app.get('/levels', async (req, res) => {
+    try {
+        const result = await client.query("SELECT * FROM levels");
+        return res.send(result.rows);
+    } catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.post('/levels', async (req, res) => {
+    try {
+        const level  = req.body;
+
+        const insertedRow = await client.query(`INSERT INTO levels (name, width, height, path, waves, gold, startingtowers)
+        VALUES ('${level.name}', '${level.width}', '${level.height}', '${level.path}', '${level.waves}', '${level.gold}', '${level.startingtowers}') RETURNING *`);
+        return res.send(insertedRow.rows[0]);
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.post('/levels/edit/:id', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        const level  = req.body;
+
+        const editedRow = await client.query(`UPDATE levels SET
+        name = '${level.name}', width = '${level.width}', height = '${level.height}', path = '${level.path}', waves = '${level.waves}', gold = '${level.gold}', startingtowers = '${level.startingtowers}'
+        WHERE id = '${id}' RETURNING *`);
+        return res.send(editedRow.rows[0]);
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+app.delete('/levels/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const deletedRow = await client.query(`DELETE FROM levels WHERE id='${id}' RETURNING *`);
+        return res.send({ level: deletedRow.rows[0] })
     }
     catch (err) {
         return res.status(500).send(err)

@@ -14,10 +14,14 @@ import EditTower from './ui/towers/EditTower';
 import Upgrades from './ui/towers/Upgrades';
 import UpgradesAdd from './ui/towers/UpgradesAdd';
 import UpgradeEdit from './ui/towers/UpgradeEdit';
+import Levels from './ui/levels/Levels';
+import AddLevel from './ui/levels/AddLevel';
+import EditLevel from './ui/levels/EditLevel';
 
 function App() {
   const [allEnemies, setAllEnemies] = useState({})
   const [allTowers, setAllTowers] = useState({})
+  const [levels, setLevels] = useState({})
   const [upgrades, setUpgrades] = useState({})
   const [allTowersWithUpgrades, setAllTowersWithUpgrades] = useState({})
 
@@ -36,6 +40,20 @@ function App() {
     .then(res => {
       const result = res.data.reduce((pre,cur)=>{return {...pre, [cur.label]: cur}}, {})
       setAllTowers(result)
+    })
+    .catch(err => {
+        window.alert("Threre was a problem with connecting to database (towers)")
+        console.log(err)
+    })
+
+    axios.get('http://localhost:5000/levels')
+    .then(res => {
+      const result = res.data.reduce((pre,cur)=>{
+        const startingtowers = cur.startingtowers.split(' ')
+        const waves = cur.waves.split('.').map(e=>e.split(',')).map(e=>e.map(a=>a.split(" ")))
+        const path = cur.path.split(' ').map(e=>parseInt(e))
+        return {...pre, [cur.id]: {...cur, startingtowers, waves, path}}}, {})
+      setLevels(result)
     })
     .catch(err => {
         window.alert("Threre was a problem with connecting to database (towers)")
@@ -100,8 +118,17 @@ function App() {
         <Route exact path='/towers/upgrades/:label/edit/:id'>
           <UpgradeEdit upgrades={upgrades} setUpgrades={setUpgrades}/>
         </Route>
+        <Route exact path='/levels'>
+          <Levels levels={levels}/>
+        </Route>
+        <Route exact path='/levels/add'>
+          <AddLevel levels={levels} setLevels={setLevels}/>
+        </Route>
+        <Route exact path='/levels/edit/:id'>
+          <EditLevel levels={levels} setLevels={setLevels}/>
+        </Route>
         <Route exact path='/level/:id'>
-          <Game towers={allTowersWithUpgrades}/>
+          <Game towers={allTowersWithUpgrades} enemies={allEnemies} levels={levels}/>
         </Route>
       </Switch>
     </Router>

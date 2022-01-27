@@ -1,23 +1,22 @@
 import { useState, useEffect } from "react"
+import { useParams } from "react-router-dom"
 import Game from "./Game"
 
 const GameDataLoader = (props) => {
 
-    const [allTowers, setAllTowers] = useState(props.towers)
-    const [allEnemies, setAllEnemies] = useState({})
+    const id = useParams().id
+    const [towers, setTowers] = useState(props.towers)
+    const [enemies, setEnemies] = useState(props.enemies)
     const [level, setLevel] = useState({})
-    const [levelData, setLevelData] = useState({width: 0, height: 0, map: [], path: [], pathBackgrounds: {}, animationTable: [], waves: [], startingTowers: [], gold: 10})
+    const [map, setMap] = useState([])
 
     useEffect(()=> {
-        setAllTowers(props.towers)
-        setAllEnemies({goblin: {hp: 10, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin', armor: 0, magicResistance: 0, gold: 5}}) // speed = [0.1, 0.2, 0.25, 0.5, 1] ewantualnie 1/3
-
-        const goblin = {hp: 10, maxHp: 10, speed: 0.5, loss: 1, img: 'goblin', armor: 0, magicResistance: 0, gold: 5}
-        const waves = [[[]], [[goblin],[],[goblin],[goblin],[],[goblin,goblin],[goblin],[],[],[goblin,goblin,goblin], [goblin], []],[[goblin], []]]
-        const path = [1,9,17,25,33,34,42,50,51,52,53,45,37,29,30,31]
-        const startingTowers = ["archers", 'peasants', 'mage']
-        setLevel({width: 8, height: 8, path: path, startingTowers, waves: waves, gold: 220})
-    },[props])
+        if(Object.keys(props.towers).length !== 0 && Object.keys(props.enemies).length !== 0 && Object.keys(props.levels).length !== 0) {
+            setTowers(props.towers)
+            setEnemies(props.enemies)
+            setLevel(props.levels[id])
+        }
+    },[props, id])
 
     useEffect(()=> {
         if(Object.keys(level).length !== 0) {
@@ -26,18 +25,16 @@ const GameDataLoader = (props) => {
                 generatedMap.push(i)
             }
 
-            const startingTowers = []
-            for (const [key, value] of Object.entries(allTowers)) {
-                if(level.startingTowers.includes(key)) {
-                    startingTowers.push(value)
-                }
-            }
+            const startingtowers = level.startingtowers.map(e=>towers[e])
 
             const animationsAndBackgrounds = getAnimationsAndBackgrounds(level.width, level.path)
-            
-            setLevelData({...level, map: generatedMap, startingTowers, ...animationsAndBackgrounds})
+
+            const waves = level.waves.map(e=>e.map(a=>a.map(b=>{return b !== '' ? enemies[b] : []})))
+
+            setMap(generatedMap)
+            setLevel({...level, waves, startingtowers, ...animationsAndBackgrounds})
         }
-    }, [level, allTowers])  
+    }, [towers, enemies])  
 
     const getAnimationsAndBackgrounds = (width, path) => {
         const calculateDirection = (a,b) => {
@@ -120,7 +117,7 @@ const GameDataLoader = (props) => {
         return result.filter(e=>{ return e >= 0 ? true : false})
     }
 
-    return <Game level={levelData} allTowers={allTowers} getRange={getRange} />
+    return <Game level={level} towers={towers} getRange={getRange} map={map}/>
 }
 
 export default GameDataLoader
