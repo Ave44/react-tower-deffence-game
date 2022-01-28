@@ -8,6 +8,7 @@ const GameDataLoader = (props) => {
     const [towers, setTowers] = useState(props.towers)
     const [enemies, setEnemies] = useState(props.enemies)
     const [level, setLevel] = useState({})
+    const [levelData, setLevelData] = useState({})
     const [map, setMap] = useState([])
 
     useEffect(()=> {
@@ -20,21 +21,21 @@ const GameDataLoader = (props) => {
 
     useEffect(()=> {
         if(Object.keys(level).length !== 0) {
-            const generatedMap = []
-            for(let i = 0; i < level.width * level.height; i++) {
-                generatedMap.push(i)
+                const generatedMap = []
+                for(let i = 0; i < level.width * level.height; i++) {
+                    generatedMap.push(i)
+                }
+
+                const startingtowers = level.startingtowers.map(e=>towers[e])
+
+                const animationsAndBackgrounds = getAnimationsAndBackgrounds(level.width, level.path)
+
+                const waves = [[], ...level.waves.map(e=>e.map(a=>a.map(b=>{return b !== '' ? enemies[b] : []})))]
+
+                setMap(generatedMap)
+                setLevelData({...level, waves, startingtowers, ...animationsAndBackgrounds})
             }
-
-            const startingtowers = level.startingtowers.map(e=>towers[e])
-
-            const animationsAndBackgrounds = getAnimationsAndBackgrounds(level.width, level.path)
-
-            const waves = level.waves.map(e=>e.map(a=>a.map(b=>{return b !== '' ? enemies[b] : []})))
-
-            setMap(generatedMap)
-            setLevel({...level, waves, startingtowers, ...animationsAndBackgrounds})
-        }
-    }, [towers, enemies])  
+    }, [level, towers, enemies])  
 
     const getAnimationsAndBackgrounds = (width, path) => {
         const calculateDirection = (a,b) => {
@@ -117,7 +118,10 @@ const GameDataLoader = (props) => {
         return result.filter(e=>{ return e >= 0 ? true : false})
     }
 
-    return <Game level={level} towers={towers} getRange={getRange} map={map}/>
+    if(Object.keys(levelData).length !== 0 && levelData.pathBackgrounds) {
+        return <div className='game' style={{'--size': `${800/level.width}px`}}><Game level={levelData} towers={towers} getRange={getRange} map={map}/></div>
+    }
+    return <div>...</div>
 }
 
 export default GameDataLoader

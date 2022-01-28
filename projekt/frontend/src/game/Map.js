@@ -8,7 +8,7 @@ const Map = (props) => {
     const size = 800/width
     const map = props.map
     const towers = props.startingTowers
-    
+
     const addTower = (index, label, cost) => {
         const difrence = props.goldDifrence.reduce((pre,cur)=>{return pre + cur}, 0)
         const curGold = props.gold - difrence
@@ -48,7 +48,7 @@ const Map = (props) => {
                 return <div className={`${props.pathBackgrounds[index]} path`} style={{height: `${size}px`, width: `${size}px`}} key={index}>
                 {enemiesOnTile.map(e=>
                 <div key={uuidv4().substring(0,8)}>
-                    <Enemy enemy={e} path={props.path} mapWidth={width} animationTable={props.animationTable} tickSpeed={props.tickSpeed}/>
+                    <Enemy enemy={e} path={props.path} size={size} animationTable={props.animationTable} tickSpeed={props.tickSpeed}/>
                 </div>
                 )}
             </div>
@@ -66,7 +66,7 @@ const Map = (props) => {
             {showTowers(index)}
         </div>
     }
-console.log(towers)
+
     if(towers) {
         return <div className="map">{map.map(i => tile(i))}</div>
     }

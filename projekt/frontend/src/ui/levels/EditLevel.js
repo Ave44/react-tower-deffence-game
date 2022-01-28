@@ -51,7 +51,7 @@ const EditLevel = (props) => {
                 history.push('/levels')
 
                 const startingtowers = res.data.startingtowers.split(' ')
-                const waves = res.data.waves.split('.').map(e=>e.split(','))
+                const waves = res.data.waves.split('.').map(e=>e.split(',')).map(e=>e.map(a=>a.split(" ")))
                 const path = res.data.path.split(' ').map(e=>parseInt(e))
                 props.setLevels({...props.levels, [res.data.id]: {...res.data, startingtowers, waves, path}})
             })

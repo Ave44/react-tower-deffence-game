@@ -5,7 +5,7 @@ import skull from './images/skull.png'
 const Statistics = (props) => {
 
     const nextWaveButton = () => {
-        if(props.next) {
+        if(props.next && !props.lastWave) {
             return <div onClick={()=>{props.nextWave()}}>next wave</div>
         }
     }

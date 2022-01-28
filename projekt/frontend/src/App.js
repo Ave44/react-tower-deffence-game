@@ -32,7 +32,7 @@ function App() {
       setAllEnemies(result)
     })
     .catch(err => {
-        window.alert("Threre was a problem with connecting to database (towers)")
+        window.alert("Threre was a problem with connecting to database (enemies)")
         console.log(err)
     })
 
@@ -40,20 +40,6 @@ function App() {
     .then(res => {
       const result = res.data.reduce((pre,cur)=>{return {...pre, [cur.label]: cur}}, {})
       setAllTowers(result)
-    })
-    .catch(err => {
-        window.alert("Threre was a problem with connecting to database (towers)")
-        console.log(err)
-    })
-
-    axios.get('http://localhost:5000/levels')
-    .then(res => {
-      const result = res.data.reduce((pre,cur)=>{
-        const startingtowers = cur.startingtowers.split(' ')
-        const waves = cur.waves.split('.').map(e=>e.split(',')).map(e=>e.map(a=>a.split(" ")))
-        const path = cur.path.split(' ').map(e=>parseInt(e))
-        return {...pre, [cur.id]: {...cur, startingtowers, waves, path}}}, {})
-      setLevels(result)
     })
     .catch(err => {
         window.alert("Threre was a problem with connecting to database (towers)")
@@ -72,6 +58,20 @@ function App() {
     })
     .catch(err => {
         window.alert("Threre was a problem with connecting to database (upgrades)")
+        console.log(err)
+    })
+    
+    axios.get('http://localhost:5000/levels')
+    .then(res => {
+      const result = res.data.reduce((pre,cur)=>{
+        const startingtowers = cur.startingtowers.split(' ')
+        const waves = cur.waves.split('.').map(e=>e.split(',')).map(e=>e.map(a=>a.split(" ")))
+        const path = cur.path.split(' ').map(e=>parseInt(e))
+        return {...pre, [cur.id]: {...cur, startingtowers, waves, path}}}, {})
+      setLevels(result)
+    })
+    .catch(err => {
+        window.alert("Threre was a problem with connecting to database (levels)")
         console.log(err)
     })
   },[])

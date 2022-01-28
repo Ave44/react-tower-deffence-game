@@ -632,171 +632,179 @@ body .map .enemy .hpBar .gray {
   height: 3px;
 }
 
+body .endScreen {
+  background-image: url("./game/images/upgradeBackground.png");
+  background-size: contain;
+  padding: 50px;
+  font-size: 25px;
+  border: black 5px solid;
+}
+
 @-webkit-keyframes moveDown {
   to {
-    -webkit-transform: translateY(100px);
-            transform: translateY(100px);
+    -webkit-transform: translateY(var(--size));
+            transform: translateY(var(--size));
   }
 }
 
 @keyframes moveDown {
   to {
-    -webkit-transform: translateY(100px);
-            transform: translateY(100px);
+    -webkit-transform: translateY(var(--size));
+            transform: translateY(var(--size));
   }
 }
 
 @-webkit-keyframes moveUp {
   to {
-    -webkit-transform: translateY(-100px);
-            transform: translateY(-100px);
+    -webkit-transform: translateY(calc(-1*var(--size)));
+            transform: translateY(calc(-1*var(--size)));
   }
 }
 
 @keyframes moveUp {
   to {
-    -webkit-transform: translateY(-100px);
-            transform: translateY(-100px);
+    -webkit-transform: translateY(calc(-1*var(--size)));
+            transform: translateY(calc(-1*var(--size)));
   }
 }
 
 @-webkit-keyframes moveRight {
   to {
-    -webkit-transform: translateX(100px);
-            transform: translateX(100px);
+    -webkit-transform: translateX(var(--size));
+            transform: translateX(var(--size));
   }
 }
 
 @keyframes moveRight {
   to {
-    -webkit-transform: translateX(100px);
-            transform: translateX(100px);
+    -webkit-transform: translateX(var(--size));
+            transform: translateX(var(--size));
   }
 }
 
 @-webkit-keyframes moveLeft {
   to {
-    -webkit-transform: translateX(-100px);
-            transform: translateX(-100px);
+    -webkit-transform: translateX(calc(-1*var(--size)));
+            transform: translateX(calc(-1*var(--size)));
   }
 }
 
 @keyframes moveLeft {
   to {
-    -webkit-transform: translateX(-100px);
-            transform: translateX(-100px);
+    -webkit-transform: translateX(calc(-1*var(--size)));
+            transform: translateX(calc(-1*var(--size)));
   }
 }
 
 @-webkit-keyframes moveDownRight {
   to {
-    -webkit-transform: translate(50px, 50px);
-            transform: translate(50px, 50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @keyframes moveDownRight {
   to {
-    -webkit-transform: translate(50px, 50px);
-            transform: translate(50px, 50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @-webkit-keyframes moveRightDown {
   to {
-    -webkit-transform: translate(50px, 50px);
-            transform: translate(50px, 50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @keyframes moveRightDown {
   to {
-    -webkit-transform: translate(50px, 50px);
-            transform: translate(50px, 50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @-webkit-keyframes moveLeftDown {
   to {
-    -webkit-transform: translate(-50px, 50px);
-            transform: translate(-50px, 50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @keyframes moveLeftDown {
   to {
-    -webkit-transform: translate(-50px, 50px);
-            transform: translate(-50px, 50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @-webkit-keyframes moveDownLeft {
   to {
-    -webkit-transform: translate(-50px, 50px);
-            transform: translate(-50px, 50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @keyframes moveDownLeft {
   to {
-    -webkit-transform: translate(-50px, 50px);
-            transform: translate(-50px, 50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size)));
   }
 }
 
 @-webkit-keyframes moveRightUp {
   to {
-    -webkit-transform: translate(50px, -50px);
-            transform: translate(50px, -50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 
 @keyframes moveRightUp {
   to {
-    -webkit-transform: translate(50px, -50px);
-            transform: translate(50px, -50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 
 @-webkit-keyframes moveUpRight {
   to {
-    -webkit-transform: translate(50px, -50px);
-            transform: translate(50px, -50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 
 @keyframes moveUpRight {
   to {
-    -webkit-transform: translate(50px, -50px);
-            transform: translate(50px, -50px);
+    -webkit-transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 
 @-webkit-keyframes moveLeftUp {
   to {
-    -webkit-transform: translate(-50px, -50px);
-            transform: translate(-50px, -50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 
 @keyframes moveLeftUp {
   to {
-    -webkit-transform: translate(-50px, -50px);
-            transform: translate(-50px, -50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 
 @-webkit-keyframes moveUpLeft {
   to {
-    -webkit-transform: translate(-50px, -50px);
-            transform: translate(-50px, -50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 
 @keyframes moveUpLeft {
   to {
-    -webkit-transform: translate(-50px, -50px);
-            transform: translate(-50px, -50px);
+    -webkit-transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
+            transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size)));
   }
 }
 

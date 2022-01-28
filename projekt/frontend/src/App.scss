@@ -481,24 +481,32 @@ body {
             }
         }
     }
+
+    .endScreen{
+        background-image: url('./game/images/upgradeBackground.png');
+        background-size: contain;
+        padding: 50px;
+        font-size: 25px;
+        border: black 5px solid;
+    }
 }
   
-@keyframes moveDown  { to { transform: translateY(100px); } }
-@keyframes moveUp    { to { transform: translateY(-100px); } }
-@keyframes moveRight { to { transform: translateX(100px); } }
-@keyframes moveLeft  { to { transform: translateX(-100px); } }
+@keyframes moveDown  { to { transform: translateY(var(--size)); } }
+@keyframes moveUp    { to { transform: translateY(calc(-1*var(--size))); } }
+@keyframes moveRight { to { transform: translateX(var(--size)); } }
+@keyframes moveLeft  { to { transform: translateX(calc(-1*var(--size))); } }
   
-@keyframes moveDownRight { to { transform: translate(50px, 50px) } }
-@keyframes moveRightDown { to { transform: translate(50px, 50px) } }
+@keyframes moveDownRight { to { transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size))) } }
+@keyframes moveRightDown { to { transform: translate(calc(0.5*var(--size)), calc(0.5*var(--size))) } }
   
-@keyframes moveLeftDown { to { transform: translate(-50px, 50px) } }
-@keyframes moveDownLeft { to { transform: translate(-50px, 50px) } }
+@keyframes moveLeftDown { to { transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size))) } }
+@keyframes moveDownLeft { to { transform: translate(calc(-0.5*var(--size)), calc(0.5*var(--size))) } }
   
-@keyframes moveRightUp { to { transform: translate(50px, -50px) } }
-@keyframes moveUpRight { to { transform: translate(50px, -50px) } }
+@keyframes moveRightUp { to { transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size))) } }
+@keyframes moveUpRight { to { transform: translate(calc(0.5*var(--size)), calc(-0.5*var(--size))) } }
   
-@keyframes moveLeftUp { to { transform: translate(-50px, -50px) } }
-@keyframes moveUpLeft { to { transform: translate(-50px, -50px) } }
+@keyframes moveLeftUp { to { transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size))) } }
+@keyframes moveUpLeft { to { transform: translate(calc(-0.5*var(--size)), calc(-0.5*var(--size))) } }
 
 @media screen and (max-width: 1220px) {
     body {
