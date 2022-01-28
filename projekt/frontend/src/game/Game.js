@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { v4 as uuid } from 'uuid'
 import Statistics from './Statistics'
 import Map from "./Map"
+import Cookies from "js-cookie"
 
 const Game = (props) => {
     const tickSpeed = 500
@@ -16,7 +17,7 @@ const Game = (props) => {
     const towersToSell = []
     const goldDifrence = []
     const [gameData, setGameData] = useState({hp: 20, gold: 0, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
-    const [gameStatus, setGameStatus] = useState({lost: false, victory: false, waveEnd: true, lastWave: false})
+    const [gameStatus, setGameStatus] = useState({lost: false, victory: false, waveEnd: true, lastWave: false, sentCokie: true})
 
     useEffect(()=>{
         setGameData({hp: 20, gold: props.level.gold, currentWave: 0, waveIndex: 0, enemies: {}, towers: {}})
@@ -185,7 +186,15 @@ const Game = (props) => {
     })
 
     if(gameStatus.lost) { return <div className="endScreen">Failure!</div> }
-    if(gameStatus.victory) { return <div className="endScreen">Victory!</div> }
+    if(gameStatus.victory) {
+        if(gameStatus.sentCokie) {
+            gameStatus.sentCokie = false
+            const cookie = Cookies.get('victories')
+            if(cookie) { Cookies.set('victories', parseInt(cookie) + 1, { expires: 1 }) }
+            else { Cookies.set('victories', 1, { expires: 1 })}
+        }
+        return <div className="endScreen">Victory!</div>
+    }
 
     return (<div>
         <Statistics hp={gameData.hp} gold={gameData.gold} wave={gameData.currentWave} next={gameStatus.waveEnd} nextWave={nextWave} lastWave={gameStatus.lastWave}/>

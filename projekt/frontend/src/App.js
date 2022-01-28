@@ -17,6 +17,7 @@ import UpgradeEdit from './ui/towers/UpgradeEdit';
 import Levels from './ui/levels/Levels';
 import AddLevel from './ui/levels/AddLevel';
 import EditLevel from './ui/levels/EditLevel';
+import Cookies from 'js-cookie';
 
 function App() {
   const [allEnemies, setAllEnemies] = useState({})
@@ -83,6 +84,15 @@ function App() {
     }
     setAllTowersWithUpgrades(result)
   },[allTowers, upgrades])
+
+  useEffect(()=>{
+    const timer = setInterval(() => {
+      const time = parseInt(Cookies.get('time'))
+      if(time) { Cookies.set('time', time+1, { expires: 1 }) }
+      else { Cookies.set('time', 1, { expires: 1 }) }
+    }, 60000)
+    return () => clearInterval(timer)
+  })
 
   return (
     <Router>

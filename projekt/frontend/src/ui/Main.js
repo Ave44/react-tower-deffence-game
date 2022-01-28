@@ -1,13 +1,45 @@
 import { useHistory } from "react-router-dom";
+import Cookies from 'js-cookie'
+import { useEffect, useState } from "react";
 
 const Main = () => {
     const history = useHistory()
+    const [minutes, setMinutes] = useState(0)
+    const [victories, setVictories] = useState(0)
+
+    useEffect(()=>{
+        const time = Cookies.get('time')
+        if(time) { setMinutes(time) }
+        else { setMinutes(0) }
+
+        const victories = Cookies.get('victories')
+        if(victories) { setVictories(victories) }
+        else { setVictories(0) }
+    },[])
+
+    useEffect(()=>{
+        const timer = setInterval(() => {
+            const time = parseInt(Cookies.get('time'))
+            if(time) {
+                setMinutes(time)
+            }
+        }, 30000)
+        return () => clearInterval(timer)
+    })
+
+    const displayVictories = () => {
+        if(victories === '1') { return <div>Today you have won {victories} game</div> }
+        return <div>Today you have won {victories} games</div>
+    }
+
+    const displayMinutes = () => {
+        if(minutes === '1') { return <div>Today you have been playing for {minutes} minute</div> }
+        return <div>Today you have been online for {minutes} minutes</div>
+    }
 
     return <div className="main">
-        main
-        <div onClick={()=>{history.push('enemies')}} className="button">Enemies</div>
-        <div onClick={()=>{history.push('towers')}} className="button">Towers</div>
-        <div onClick={()=>{history.push('levels')}} className="button">Levels</div>
+        <div>{displayMinutes()}</div>
+        <div>{displayVictories()}</div>
     </div>
 }
 
