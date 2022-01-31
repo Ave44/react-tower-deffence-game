@@ -86,10 +86,13 @@ function App() {
   },[allTowers, upgrades])
 
   useEffect(()=>{
+    const today = new Date();
+    const tomorrow = new Date(new Date(today.getTime() + (24 * 60 * 60 * 1000)).setHours(0,0,0,0))
+
     const timer = setInterval(() => {
       const time = parseInt(Cookies.get('time'))
-      if(time) { Cookies.set('time', time+1, { expires: 1 }) }
-      else { Cookies.set('time', 1, { expires: 1 }) }
+      if(time) { Cookies.set('time', time+1, { expires: tomorrow }) }
+      else { Cookies.set('time', 1, { expires: tomorrow }) }
     }, 60000)
     return () => clearInterval(timer)
   })

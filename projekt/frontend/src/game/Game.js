@@ -190,8 +190,10 @@ const Game = (props) => {
         if(gameStatus.sentCokie) {
             gameStatus.sentCokie = false
             const cookie = Cookies.get('victories')
-            if(cookie) { Cookies.set('victories', parseInt(cookie) + 1, { expires: 1 }) }
-            else { Cookies.set('victories', 1, { expires: 1 })}
+            const today = new Date();
+            const tomorrow = new Date(new Date(today.getTime() + (24 * 60 * 60 * 1000)).setHours(0,0,0,0))        
+            if(cookie) { Cookies.set('victories', parseInt(cookie) + 1, { expires: tomorrow }) }
+            else { Cookies.set('victories', 1, { expires: tomorrow })}
         }
         return <div className="endScreen">Victory!</div>
     }

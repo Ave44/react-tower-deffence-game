@@ -1,9 +1,7 @@
-import { useHistory } from "react-router-dom";
 import Cookies from 'js-cookie'
 import { useEffect, useState } from "react";
 
 const Main = () => {
-    const history = useHistory()
     const [minutes, setMinutes] = useState(0)
     const [victories, setVictories] = useState(0)
 
