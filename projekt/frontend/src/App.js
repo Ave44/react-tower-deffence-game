@@ -18,6 +18,9 @@ import Levels from './ui/levels/Levels';
 import AddLevel from './ui/levels/AddLevel';
 import EditLevel from './ui/levels/EditLevel';
 import Cookies from 'js-cookie';
+import Chat from './ui/Chat';
+import { v4 as uuid } from 'uuid';
+import mqtt from 'mqtt/dist/mqtt';
 
 function App() {
   const [allEnemies, setAllEnemies] = useState({})
@@ -25,6 +28,9 @@ function App() {
   const [levels, setLevels] = useState({})
   const [upgrades, setUpgrades] = useState({})
   const [allTowersWithUpgrades, setAllTowersWithUpgrades] = useState({})
+
+  const [id, setId] = useState(uuid().substring(0,4))
+  const [client, setClient] = useState(null)
 
   useEffect(()=>{
     axios.get('http://localhost:5000/enemies')
@@ -97,12 +103,48 @@ function App() {
     return () => clearInterval(timer)
   })
 
+  useEffect(()=>{
+    setClient(mqtt.connect({path: '/mqtt', port: 8000, hostname: 'localhost'})) 
+  },[])
+
+  useEffect(()=> {
+    if(client) {
+      client.on('connect', function () {
+        client.subscribe('chat', function (err) {
+          if (!err) {
+            client.publish('chat', `user ${id} have joined chat`)
+          }
+        })
+      })
+        
+      client.on('message', function (topic, message) {
+        // console.log('-mqtt-', message.toString())
+        if(topic==='chat') {
+          appendChat(message.toString())
+        }
+      })
+
+      client.on('close', function (topic, message) {
+        client.publish('chat', `user ${id} have left chat`)
+        client.end()
+      })
+    }
+  },[client])
+
+    const appendChat = (text) => {
+      const ul = document.getElementById("list");
+      const li = document.createElement("li");
+      li.appendChild(document.createTextNode(text));
+      ul.appendChild(li);
+  }
+
   return (
     <Router>
       <Topbar />
       <Switch>
         <Route exact path='/'>
-          <Main />
+          <Main/>
+          <Chat id={id} setId={setId} client={client} setClient={setClient}/>
         </Route>
         <Route exact path='/enemies'>
           <Enemies enemies={allEnemies}/>

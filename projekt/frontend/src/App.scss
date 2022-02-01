@@ -34,6 +34,40 @@ body {
         background-image: url('./game//images/upgradeBackground.png');
         background-size: contain;
         padding: 50px;
+        border: black 5px solid;
+        margin-bottom: 20px;
+
+        .title {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .send {
+            display: flex;
+            margin-bottom: 20px;
+            justify-content: space-between;
+
+            .button {
+                width: 200px;
+                margin: 0;
+            }
+            input {
+                height: 35px;
+                width: 350px;
+            }
+        }
+    }
+
+    .chat {
+        background-image: url('./game//images/upgradeBackground.png');
+        background-size: contain;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 25px;
+        border: black 3px solid;
+        list-style-type: none;
+        line-height: 20px;
     }
 
     .button {
