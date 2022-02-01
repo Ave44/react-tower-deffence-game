@@ -3,7 +3,13 @@ import coin from './images/coin.png';
 const Tower = (props) => {
     const tower = props.tower
     const size = props.size
-    const img = require(`./images/${tower.img}.png`)
+
+    let img = null
+    try {
+        img = require(`./images/${tower.img}.png`)
+    } catch {
+        img = require(`./images/unknown.png`)
+    }
     const rangeImg = require(`./images/ranges/range${tower.range}.png`)
 
     const upgrade = (label, cost) => {

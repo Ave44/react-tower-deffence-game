@@ -4,6 +4,13 @@ const Enemy = (props) => {
     const animation = props.animationTable[Math.floor(enemy.position)]
     const size = props.size
 
+    let img = null
+    try {
+        img = require(`./images/${enemy.img}.png`)
+    } catch {
+        img = require(`./images/unknown.png`)
+    }
+
     const calculateOffset = () => {
         const offset = parseInt(enemy.position * size) % size
         
@@ -44,7 +51,7 @@ const Enemy = (props) => {
     return <div className="enemy" style={{ top: `${offset.top + enemy.offsetX - size*0.5}px`, left: `${offset.left + enemy.offsetY}px`,
     animationName: `${animation}`, animationDuration: `${tickSpeed / enemy.speed}ms` }}>
         {displayHp()}
-        <img src={require(`./images/${enemy.img}.png`)} alt={props.img} style={{width: `${size}px`}}/>
+        <img src={img} alt={props.img} style={{width: `${size}px`}}/>
     </div>
 }
 

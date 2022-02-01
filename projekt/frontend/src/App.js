@@ -131,11 +131,13 @@ function App() {
     }
   },[client])
 
-    const appendChat = (text) => {
+  const appendChat = (text) => {
+    try {
       const ul = document.getElementById("list");
       const li = document.createElement("li");
       li.appendChild(document.createTextNode(text));
       ul.appendChild(li);
+    } catch { }
   }
 
   return (

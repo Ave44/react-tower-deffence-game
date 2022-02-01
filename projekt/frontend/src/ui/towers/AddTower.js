@@ -22,7 +22,7 @@ const AddTower = (props) => {
             axios.post('http://localhost:5000/towers', tower)
             .then(res => {
                 history.push('/towers')
-                props.setAllTowers({...props.allTowers, [tower.label]: tower})
+                props.setAllTowers({...props.allTowers, [tower.label]: {...tower, id: res.data.id}})
             })
             .catch(err => {
                 window.alert("Threre was a problem with adding the tower")

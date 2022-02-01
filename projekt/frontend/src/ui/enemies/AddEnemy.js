@@ -26,7 +26,7 @@ const AddEnemy = (props) => {
             axios.post('http://localhost:5000/enemies', enemy)
             .then(res => {
                 history.push('/enemies')
-                props.setAllEnemies({...props.allEnemies, [label]: enemy})
+                props.setAllEnemies({...props.allEnemies, [label]: {...enemy, id: res.data.id}})
             })
             .catch(err => {
                 window.alert("Threre was a problem with adding the enemy")
