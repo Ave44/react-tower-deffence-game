@@ -79,6 +79,14 @@ body .main .send input {
   width: 350px;
 }
 
+body .main .log {
+  width: 250px;
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 0;
+  top: 20px;
+}
+
 body .chat {
   background-image: url("./game//images/upgradeBackground.png");
   background-size: contain;

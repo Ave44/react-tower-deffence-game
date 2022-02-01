@@ -143,7 +143,7 @@ function App() {
       <Topbar />
       <Switch>
         <Route exact path='/'>
-          <Main/>
+          <Main id={id}/>
           <Chat id={id} setId={setId} client={client} setClient={setClient}/>
         </Route>
         <Route exact path='/enemies'>

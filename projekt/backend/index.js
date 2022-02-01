@@ -5,6 +5,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const fs = require('fs');
+
 const dbConnData = {
     host: '127.0.0.1',
     port: 5432,
@@ -302,6 +304,21 @@ app.delete('/levels/:id', async (req, res) => {
 
         const deletedRow = await client.query(`DELETE FROM levels WHERE id='${id}' RETURNING *`);
         return res.send({ level: deletedRow.rows[0] })
+    }
+    catch (err) {
+        return res.status(500).send(err)
+    }
+});
+
+///////////////////////////////// Logs
+
+app.post('/logs', async (req, res) => {
+    try {
+        const log  = req.body.log
+        const stream = fs.createWriteStream("log.txt", {flags:'a'});
+        stream.write(log + "\n");
+        stream.end();
+        return res.send(log);
     }
     catch (err) {
         return res.status(500).send(err)

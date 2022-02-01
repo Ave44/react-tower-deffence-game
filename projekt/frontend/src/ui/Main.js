@@ -1,7 +1,8 @@
 import Cookies from 'js-cookie'
 import { useEffect, useState } from "react";
+import SaveLogs from './SaveLogs';
 
-const Main = () => {
+const Main = (props) => {
     const [minutes, setMinutes] = useState(0)
     const [victories, setVictories] = useState(0)
 
@@ -38,6 +39,7 @@ const Main = () => {
     return <div className="main">
         <div>{displayMinutes()}</div>
         <div>{displayVictories()}</div>
+        <SaveLogs minutes={minutes} victories={victories} id={props.id}/>
     </div>
 }
 
